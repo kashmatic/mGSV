@@ -1,3 +1,4 @@
+#org_id	start	end	strand	feature_name	feature_value	track_name	track_shape	track_color
 Organism_C	42	3972	+	XG001		gene	arrow	brown
 Organism_C	11315	14256	+	XG009		gene	arrow	brown
 Organism_C	21795	24828	+	XG019		gene	arrow	brown
