@@ -383,7 +383,7 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 				<table class="inputTable">
 					<tr>
 						<td valign="top">
-							<label for="file0">Upload <a href="img/syntenyImage.jpg" class="thickbox" title="The format of synteny file">synteny</a> file (Required)&nbsp;<span class="formInfo"><a href="html/hint5.htm?width=375" class="jTip" id="six" name=''>?</a></span></label>
+							<label for="file0">Upload <a href="img/syntenyImage.png" class="thickbox" title="The format of synteny file">synteny</a> file (Required)&nbsp;<span class="formInfo"><a href="html/hint5.htm?width=375" class="jTip" id="six" name=''>?</a></span></label>
 						</td>
 						<td valign="top" width="300px">
 							<input type="file" id="file0" name="file0" /><br>
@@ -395,7 +395,7 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 					</tr>
 					<tr>
 						<td>
-							<label for="annotation">Upload <a href="img/annotationImage.jpg" class="thickbox" title="The format of annotation file">annotation</a> file (Optional)&nbsp;<span class="formInfo"><a href="html/hint6.htm?width=375" class="jTip" id="seven" name=''>?</a></span></label>
+							<label for="annotation">Upload <a href="img/annotationImage.png" class="thickbox" title="The format of annotation file">annotation</a> file (Optional)&nbsp;<span class="formInfo"><a href="html/hint6.htm?width=375" class="jTip" id="seven" name=''>?</a></span></label>
 						</td>
 						<td>
 							<input type="file" id="file1" name="file1" class="{validate:{required:false,accept:'gz|txt|zip'}}" />
