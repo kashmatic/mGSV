@@ -1,0 +1,4 @@
+gene	arrow	red
+CDS	box	blue
+misc_feature	box	green
+microarray_oligo	xyplot	sky

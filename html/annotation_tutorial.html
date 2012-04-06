@@ -1,0 +1,97 @@
+<h4>Annotation File</h4>
+<h4>1. Format</h4>
+<p>
+	- The annotation file must be prepared as illustrated in the example file below.<br>
+	- It must be a 9-column tab delimited file.<br>
+</p>
+
+<h4>2. Column descriptions</h4>
+<p><span style="color:#800080;">Column 1: ID</span><br>
+	- This where the ID is entered and must correspond to the ID provided in Column 1 or Column 4 in the Synteny file.<br>
+	- It must be alphanumeric and can have either underscores or spaces, but it does not support the use of tabs.<br>
+	Examples of acceptable formats: Org_A, Chromosome 3, HS19
+</p>
+
+<p><span style="color:#800080;">Column 2: Start</span><br>
+	- This is where the Start coordinate of the annotated feature is entered.<br>
+	- It must be numeric.<br>
+	Example of acceptable format: 11315
+</p>
+
+<p><span style="color:#800080;">Column 3: End</span><br>
+	- This where the End coordinate of the annotated feature is entered.<br>
+	- It must be numeric.<br>
+	Example of acceptable format: 15093
+</p>
+
+<p><span style="color:#800080;">Column 4: Strand</span><br>
+	- This is where the Strand orientation of the annotated feature is entered.<br>
+	- It must be either + which denotes a forward strand or - which denotes a reverse strand.<br>
+	- If not applicable, provide a period, (.).<br>
+	Examples of acceptable formats: +, -, .
+</p>
+
+<p><span style="color:#800080;">Column 5: Name</span><br>
+	- This is where the name of the annotated feature is entered.<br>
+	- It can be alphanumeric.<br>
+	- If not applicable, provide a period, (.).<br>
+	Examples of acceptable formats: PAU_0022, 123.09
+</p>
+
+<p><span style="color:#800080;">Column 6: Value</span><br>
+	- This is where a Value associated with the feature can be entered.<br>
+	- This is usually an expression value to generate an XY plot.<br>
+	- It must be numeric or in scientific notation.<br>
+	- If not applicable, provide a period, (.).<br>
+	Examples of acceptable formats:  85, 35, 1e-4
+</p>
+
+<p><span style="color:#800080;">Column 7: Track</span><br>
+	- This is where you can name the feature to a specific Track.<br>
+	- It can be alphanumeric.<br>
+	- Each unique entry in this column will result in a track.<br>
+	Examples of acceptable formats: gene, transposon, expression
+</p>
+
+<p><span style="color:#800080;">Column 8: Shape</span><br>
+	- This is where you can enter and define the Shape of the annotated feature.<br>
+	- We support the following 7 shapes: arrow, dashline, xyplot, pentagram, christmasarrow, box and ellipse.<br>
+	- It is not case-sensitive.<br>
+	Examples of acceptable formats: arrow, box, xyplot
+</p>
+
+<p><span style="color:#800080;">Column 9: Color</span><br>
+	- This is where you can enter and define the Color display of the Annotated feature.<br>
+	- We support the following 32 colors: purple, pink, crimson, olive, sandybrown, firebrick, darkgray, tomato, seagreen, peru, lightsteelblue, salmon, khaki, skyblue, maroon, silver,<br> gold, darkgreen, orange, chocolate, darkcyan, tan, darkviolet, indianred, gainsboro, brown, gray, red, thistle, darkslategray, magenta, and black.<br>
+	- If the color name is misspelled, the shape will automatically be displayed in black color.<br>
+	- It is not case-sensitive.<br>
+	Examples of acceptable formats:  red, chocolate, pink
+</p>
+
+<h4>3. <a name="imageofann"></a>Screen shot of annotation file</h4>
+<img src="img/annotation.png" border="1px" alt="params">
+<h4>4. <a name="genannfile"></a>Generate annotation_file.txt</h4>
+
+<p>
+	Disclaimer: We hope the example provided in this script is a valuable resource for you. Your use of the information contained in this script is at your own risk. All information <br>provided on this script, whether expressed or implied, is not warranted for its accuracy, completeness, appropriateness for a particular purpose, authorized, recommended, <br>supported, or guaranteed by the mGSV team.
+	<br><br>
+	- The most common format for genome annotation information is GFF3 format. These GFF3 format files can be downloaded from NCBI(<a href="ftp://ftp.ncbi.nih.gov/genomes/Bacteria/">ftp://ftp.ncbi.nih.gov/genomes/Bacteria/</a>) <br>and other sources, or produced by running genome annotation programs on your sequence of interest.<br>
+	- To convert GFF3 format into mGSV format, user will require a text file called conf.txt and a perl script called GFF3parser.pl.<br>
+	- conf.txt (<a href="scripts/conf.txt">download</a>): This is a tab delimited file to extract required information from a GFF3 file, where Column 1 is the feature in the GFF3 file, Column 2 is the desired shape and <br>Column 3 is the desired color.
+	<pre>   
+	gene       arrow   red
+	CDS     box     blue
+	misc_feature    box     green
+	microarray_oligo        xyplot  sky
+	where - CDS, gene, mis_feature and microarray_oligo are features you want to extract from the GFF3 file.
+	</pre>
+	<p>- GFF3parser.pl (<a href="scripts/GFF3parser.pl">download</a>)</p>
+	<pre>Usage: GFF3parser.pl -n &lt;genome&gt; -i &lt;gff3_file&gt; -c &lt;conf.txt&gt; -o &lt;output_file&gt;
+	where -
+	genome: name or ID of the genome
+	gff3_file: name or path to GFF3 file
+	conf.txt: file as described above
+	output_file: name of the output file, e.g., annotation_file.txt
+	</pre>
+	<p>- You can combine more than one annotation_file.txt to generate a single annotation_file.txt</p>
+</p>

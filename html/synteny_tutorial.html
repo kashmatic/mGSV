@@ -1,0 +1,92 @@
+<h4>Synteny File</h4>
+<h4>1. Format</h4>
+<p>
+	- Line 1 must begin with the pound symbol '#'.<br>
+	- Line 1 must contain column headers separated by tabs.<br>
+	- Column headers can be labeled any term of your choice that contains alphabetic characters.<br>
+	- Columns 1 to 6 (<span style="color:#800080;">in purple below</span>) are mandatory and values must be entered in the fields.<br>
+	- Columns 7 to N (<span style="color:#FFA500;">in orange below</span>) are provided as additional features and are not required to be filled out for the program to work.
+</p>
+
+<h4>2. Column 1-6 description (mandatory fields)</h4>
+<p><span style="color:#800080;">Column 1: Genome1_ID</span><br>
+	- This is where the ID of genome 1 must be entered.<br>
+	- It must be alphanumeric with either underscores or spaces, but does not support tabs.<br>
+	- This field can be the name or ID of the organism, chromosome, scaffold and contig, etc.<br>
+	Examples of acceptable formats: Org_A, Chromosome 3, HS19
+</p>
+
+<p><span style="color:#800080;">Column 2: Genome1_Start</span><br>
+	- This is where the Start coordinate of the conserved region on genome 1 is entered.<br>
+	- It must be numeric.<br>
+	Example of acceptable format: 3001768
+</p>
+
+<p><span style="color:#800080;">Column 3: Genome1_End</span><br>
+	- This is where the End coordinate of the conserved region on genome 1 is entered.<br>
+	- It must be numeric.<br>
+	Example of acceptable format: 3020367
+</p>
+
+<p><span style="color:#800080;">Column 4: Genome2_ID</span><br>
+	- This is where the ID of genome 2 is entered.<br>
+	- The format of the entry must be alphanumeric and can have either underscores or spaces, but does not support tabs.<br>
+	- This field can be the name or ID of the organism, chromosome, scaffold and contig, etc.<br>
+	Example of acceptable formats:  Org_B, Chromosome 5, CE8
+</p>
+
+<p><span style="color:#800080;">Column 5: Genome2_Start</span><br>
+	- This is where the Start coordinate of the conserved region on genome 2 is entered.<br>
+	- It must be numeric.<br>
+	Example of acceptable format: 2983692
+</p>
+
+<p><span style="color:#800080;">Column 6: Genome2_End</span><br>
+	- This is where the End coordinate of the conserved region on genome 2 is entered.<br>
+	- It must be numeric.<br>
+	Example of acceptable format: 32991467
+</p>
+
+<h4>3. <a name="optdes"></a>Column 7 onwards</h4>
+<p>
+	- The following fields are optional and are provided as additional features.<br>
+	- To use these fields all entries must be numeric values.
+</p>
+
+<p><span style="color:#FFA500;">Column 7: Score</span><br>
+	- In this example column 7 contains the score generated for the alignment.<br>
+	- e.g., 255, 86, 198
+</p>
+	
+<p><span style="color:#FFA500;">Column 8: E-value</span><br>
+	- In this example column 8 contains the e-value generated for the alignment.<br>
+	- e.g., 1e-40, 1.7e-8, 1
+</p>
+
+<h4>4. <a name="imageofsyn"></a>Screen shot of synteny file</h4>
+<img src="img/synteny.png" border="1px" alt="params"><br>
+<h4>5. <a name="gensynfile"></a>Generate synteny_file.txt</h4>
+<p>
+	Disclaimer: We hope the example provided in this script is a valuable resource for you. Your use of the information contained in this script is at your own risk. All information <br>provided on this script, whether expressed or implied, is not warranted for its accuracy, completeness, appropriateness for a particular purpose, authorized, recommended,<br> supported, or guaranteed by the mGSV team.
+	<br><br>
+	- mGSV allows users to visually identify conserved regions among their genomes of interest, however mGSV does not generate the synteny data for the user. Synteny data must be <br />generated using a third party program such as BLAST, BLASTZ or other software. If you have any questions or concerns with generating synteny data to use with mGSV, <br />please feel free to contact our team.<br>
+	- mGSV provides the following scripts to help convert the BLAST or BLASTZ output into the proper mGSV format.<br>
+	- BLASTparser.pl (<a href="scripts/BLASTparser.pl">download</a>): This script will convert standard BLAST output into synteny_file.txt for mGSV.<br>
+	<pre>Usage: BLASTparser.pl -r &lt;query_genome&gt; -t &lt;hit_genome&gt; -i &lt;blout_file&gt; -o &lt;output_file&gt;
+	where -
+	query_genome: name or ID of the query genome.
+	hit_genome: name or ID of the hit genome.
+	blout_file: name or path to BLAST output file, where query_genome is blasted against hit_genome
+	output_file: name of the output file, for e.g., synteny_file.txt
+	</pre>
+	<p>- BLASTZparser.pl (<a href="scripts/BLASTZparser.pl">download</a>): This script will convert standard BLASTZ output into synteny_file.txt for mGSV.<br></p>
+	<pre>Usage: BLASTZparser.pl -r &lt;query_genome&gt; -t &lt;hit_genome&gt; -i &lt;blastz_output_file&gt; -o &lt;output_file&gt;
+	where -
+	query_genome: name or ID of the query genome.
+	hit_genome: name or ID of the hit genome.
+	blout_file: name or path to BLASTZ output file, where query_genome is blasted against hit_genome
+	output_file: name of the output file, for e.g., synteny_file.txt
+	</pre>
+	<p>        - You can combine more than one synteny_file.txt to generate a single synteny_file.txt</p>
+</p>
+	

@@ -1,0 +1,248 @@
+/*
+@import "reset.css";
+@import "grid.css";
+*/
+body { font-family: "PT Sans", "Trebuchet MS", sans-serif; line-height: 1.5em; color: #334; }
+
+.section { float: left; clear: both; width: 800px; padding-top: 80px; }
+
+h1, h2, h3, p, dd, .field { margin-bottom: 1em; }
+
+input[type=text], textarea { width: 100%; font-size: 16px; padding: 2px; }
+
+ul li { list-style-type: square; list-style-position: inside; }
+
+a, a:visited { color: #666; }
+a:hover { color: #0BF; }
+
+a.button { background: #666; color: #fff; padding: 3px 6px 5px; text-decoration: none; border-radius: 4px; }
+a.button:hover { background: #0BF; color: #fff; }
+
+h2 { font-size: 48px; font-family: "PT Serif", Georgia, serif;  }
+
+.section-header .container h2 { top center no-repeat; height: 70px; padding: 22px 20px; position: relative; left: -20px; margin-bottom: 0; text-align: center; }
+
+#top, #intro { margin: 0; padding: 0; }
+
+#top { padding: 40px 0px; } 
+
+#intro { padding-bottom: 12px; height: 498px; }
+
+#top h1 { top center no-repeat; width: 196px; height: 50px; text-indent: -9999px; text-align: center; margin: 0 auto;  }
+
+h3, dt { font-family: "PT Serif", Georgia, serif; font-weight: bold; color: #F37; }
+
+#message-sent, #ajax-loader { display: none; }
+
+.coby { margin-bottom: 12px; }
+
+.philosophy { background: #F37; color: #FFF; padding: 2px 5px; position: relative; left: -5px; margin-right: -5px; }
+
+#portfolio li {
+	list-style-type: none;
+	list-style-image: none;
+	margin-bottom: 20px;
+}
+
+#portfolio li a span.project-pic {
+	float: left;
+	width: 300px;
+	height: 200px;
+}
+
+#portfolio li a {
+	float: left;
+	background: #333;
+	width: 300px;
+	border: none;
+	text-decoration: none;
+}
+
+#portfolio li a:hover {
+	background: #0BF;
+}
+
+#portfolio li a span.project-name {
+	float: left;
+	padding: 5px 10px 5px;
+	color: #FFF;
+	font-family: "PT Sans", sans-serif;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #000;
+}
+
+
+#nav ul, #nav ul li { list-style-type: none; margin: 0; padding: 0; list-style: none; }
+
+#nav {
+    height: 44px;
+    /*background: #333;*/
+    line-height: 40px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    /*width: 100%;*/
+   min-width:800px;
+    z-index: 999;
+/*    background: #333 bottom center repeat-x;*/
+}
+/*
+#nav.floating {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+}
+*/
+#nav img { position:absolute; width: 155px; hiegth: 44px; left:0px; top: 0px;}
+#nav ul { width: 100%; text-align: center; margin: 0px; }
+
+#nav ul li { margin: 0px 5px; display: inline; }
+
+#nav ul li a { text-decoration: none; color: #333; font-family: "PT Sans", "Trebuchet MS", sans-serif; text-transform: none; text-shadow: 1px 1px 1px #000; }
+
+#nav ul li a:active { outline: none; }
+
+#nav ul li a span { padding: 3px 8px 5px; border-radius: 5px; }
+
+#nav ul li a.active span { background: #F37; }
+
+#nav ul li a.active, #nav ul li a.active:hover { color: #fff; background: #F37; }
+
+#nav ul li a:hover { color: #0BF; }
+
+#bottom { text-align: center; }
+
+@-moz-document url-prefix() {
+	a.button { padding: 6px 6px 4px; }
+	#nav ul li a, #portfolio li a span.project-name { font-weight: normal; }
+	#nav ul li a span { padding: 7px 8px 5px; }
+	#portfolio li a span.project-name { padding: 7px 10px 5px; }
+	.philosophy { padding: 5px 5px 2px; }
+	label { position: relative; top: 2px; }
+}
+
+.error-explanation { margin-bottom: 0; }
+
+.error-list { margin-bottom: 1em; }
+
+
+/* change for upload file jquery plugin
+.error { display: none; }
+*/
+
+
+label.error-highlighted { background: #F37; padding: 2px 3px; margin-bottom: 0; }
+input.error-highlighted { border: 2px solid #F37; }
+textarea.error-highlighted { border: 2px solid #F37; }
+label { line-height: 1em; }
+
+.elsewhere li {
+    list-style-type: none;
+    margin-left: 0;
+    margin-bottom: 3px;
+}
+
+.elsewhere li a {
+    padding: 5px 0px 5px 22px;
+    border: none;
+}
+
+.elsewhere li a:hover {
+    text-decoration: underline;
+}
+.hide {
+	display: none;
+}
+.faqsection {
+	margin: 10px 0;
+}
+
+div.faq {
+	margin: 10px 0 0 10px;
+}
+
+div.faq .question {
+	color: #2763A5;
+	cursor:  pointer;
+	padding-left: 10px;
+	background: url(../img/raquo.gif) no-repeat left 5px;
+}
+
+div.faq .question.active {
+	background-image: url(../img/raquo-down.gif);
+}
+
+div.faq .answer  {
+	margin-left: 10px;	
+}
+
+
+.mypets{ /*accordion*/
+cursor: hand;
+cursor: pointer;
+padding: 2px 5px;
+border: 1px solid gray;
+background: #E1E1E1;
+}
+
+.openpet{ /*class added to contents of tutorial when they are open*/
+background: #F37;
+}
+
+
+
+#slideshow {
+        top: 0px;
+        margin:0 auto;
+        width:1500px;
+        height:900px;
+        position:relative;
+}
+#slideshow #slidesContainer {
+  margin:0 auto;
+  width:1300px;
+  overflow:auto; /* allow scrollbar */
+  position:relative;
+}
+#slideshow #slidesContainer .slide {
+  margin:0 auto;
+  width:1300px; /* reduce by 20 pixels of #slidesContainer to avoid horizontal scroll */
+  height:900px;
+  overflow:auto;
+}
+
+.control {
+  display:block;
+  width:39px;
+  height:900px;
+  text-indent:-10000px;
+  position:absolute;
+  cursor: pointer;
+}
+#leftControl {
+  top:0;
+  left:0;
+  background:transparent url(../img/control_left.jpg) repeat 0 0;
+}
+#rightControl {
+  top:0;
+  right:0;
+  background:transparent url(../img/control_right.jpg) repeat 0 0;
+}
+
+.slide a, .slide p, .slide pre, .slide i {
+  font: 16px Georgia, "PT Serif", serif;
+  color:#333;
+  letter-spacing:-1px;
+}
+.slide span {
+  font: 18px Georgia, "PT Serif", serif;
+  letter-spacing:-1px;
+}
+.slide h4 {
+  font: 20px Georgia, "PT Serif", serif;
+  color:#800080;
+  letter-spacing:-1px;
+}
+
