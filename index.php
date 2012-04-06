@@ -12,9 +12,9 @@ if (isset($_POST['pro'])) {
 	$newsession_id = date('tniHYsu') . getmypid();
 
 	## Get the upload directory and database settings
-	require_once ("lib/settings.php");
+	require_once("lib/settings.php");
 	## connect to the database
-	require_once ("lib/database.php");
+	require_once("lib/database.php");
 	
 	## Initialize array to hold the filename
 	$filename = array();
