@@ -336,6 +336,8 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="css/homepage.css" />
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+		<script type="text/javascript" src="js/thickbox.js"></script>
+		<link rel="stylesheet" href="css/thickbox.css" />
 		<script src="js/jtip.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
