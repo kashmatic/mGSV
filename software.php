@@ -30,7 +30,7 @@
 		<fieldset>
 			<legend>Software download</legend>
 			<p class="bodypara">
-				<p>The software can be dowloaded <a href="cas-bioinfo.cas.unt.edu/mgsv/mgsv.1.0.tar.gz">here</a>.</p>
+				<p>The software can be dowloaded <a href="http://cas-bioinfo.cas.unt.edu/mgsv/mgsv.1.0.tar.gz">here</a>.</p>
 			</p>
 		</fieldset>
 		<br>
