@@ -88,8 +88,16 @@ while($row = mysql_fetch_assoc($result)){
 	}
 	#echo $row['org1'],' ', $row['org1_start'], ' ', $row['org1_end'], ' ', $row['org2'], ' ', $row['org2_start'], ' ', $row['org2_end'],'<br>';
 	#echo $arr_set1[0], '_', $arr_set1[1], '_', $arr_set2[0], '_', $arr_set2[1], '_', $pixel1, '_', $pixel2, '<br>';
-	$html .= $row['org1'] .": <br>from ". $row['org1_start']. ' to ' .$row['org1_end'].'<br>';
-	$html .= $row['org2'] .": <br>from ". $row['org2_start']. ' to ' .$row['org2_end'];
+	if($row['org1_start'] > $row['org1_end']){
+		$html .= $row['org1'] .": <br>from ". $row['org1_end']. ' to ' .$row['org1_start'].'<br>';
+	} else {
+		$html .= $row['org1'] .": <br>from ". $row['org1_start']. ' to ' .$row['org1_end'].'<br>';
+	}
+	if($row['org2_start'] > $row['org2_end']){
+		$html .= $row['org2'] .": <br>from ". $row['org2_end']. ' to ' .$row['org2_start'];
+	} else {
+		$html .= $row['org2'] .": <br>from ". $row['org2_start']. ' to ' .$row['org2_end'];
+	}
 	$color = getRandomColorHex();
 	$set = (string) $tl . "_" . (string) $tr . "_" . (string) $br . "_" . (string) $bl . "_" . $row['SYNcolor'];
 	array_push($syn_array['pos'], $set);

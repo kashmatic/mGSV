@@ -320,7 +320,6 @@ function syntenySettings(order){
 $(document).ready(function(){
 	// Get the session id.
 	session_id = $('#session_id').val();
-	//console.log(session_id);
 	// Get the array order to be displayed. 
 	getOrderArray(session_id);
 });

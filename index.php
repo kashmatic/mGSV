@@ -339,6 +339,10 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 		<script type="text/javascript" src="js/thickbox.js"></script>
 		<link rel="stylesheet" href="css/thickbox.css" />
 		<script src="js/jtip.js" type="text/javascript"></script>
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
 
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
@@ -355,6 +359,10 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 		</script>
 		<script>
 			$(document).ready(function(){
+				if($.browser.msie){
+					$('#msie').css({'display': 'block'});
+				}
+				console.log($.browser);
 				$('#MgsvForm').submit(function(){
 					$('#rotate').css({'display': 'block'});
 					if($('#file0').val() == ''){
@@ -428,6 +436,9 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 					echo $bool_page;
 				} 
 			?>
+			</div>
+			<div id='msie' style="display:none">
+				Current IE browser is not equipped to use mGSV. Please use Mozilla Firefox, Chrome, Safari.
 			</div>
 		</div>
 		<? include ('lib/footer.php') ?>
