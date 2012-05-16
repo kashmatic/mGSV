@@ -84,25 +84,12 @@ else if ($data == 'order'){
 		$assarr[array_search($row['org2'], $default)][array_search($row['org2'], $default)] = 0;
 		#echo array_search($row['org2'], $default) . "][ ". array_search($row['org2'], $default) . '<br>';
 	}
-	$random = $default;
-	shuffle($random);
-	$diff = array_diff_assoc($default,$random);
-	while( sizeof($diff) == 0){
-		shuffle($random);
-		$diff = array_diff_assoc($default,$random);
-	}
 	$array['def'] = join('__ORDER__', $default);
-	$array['ran'] = join('__ORDER__', $random);
-	
 	
 	foreach($default as $a){
 		//echo "$a<br>";
 	}
-	//echo "---<br>";
-	foreach($random as $a){
-		//echo "$a<br>";
-	}
-	//echo "---<br>";
+
 	$a = FindOrder($assarr);
 	$sugg = array();
 	//echo sizeof($a),'<br>';

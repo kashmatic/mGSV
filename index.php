@@ -217,6 +217,10 @@ if (isset($_POST['pro'])) {
 			for ($jj = 0; $jj < count($num_of_items); $jj++) {
 				$values .= "'" . $num_of_items[$jj] . "',";
 			}
+			if(substr($num_of_items[0], 0, 50) == substr($num_of_items[3], 0, 50)){
+				$bool_page = "The first 50 characters of Org1 and Org2 are similar at line $line_number.";
+				break;
+			}
 			if($check_length == false){
 				$org2 = abs($num_of_items[4] - $num_of_items[5]) + 1;
 				$org1 = abs($num_of_items[1] - $num_of_items[2]) + 1;

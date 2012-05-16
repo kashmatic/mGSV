@@ -29,14 +29,14 @@
 			</tr>
 			<tr>
 				<td valign=top>
-					<h4 style="color: #4682B4">Select viewing order</h4>
+					<h4 style="color: #4682B4">Select viewing order <span id="rotate" style="display:block; color: black;">Loading... <img src="img/rotating_arrow.gif" /></span></h4>
 					<span id=default class="orderTab" onclick=showThis('def')>From input file</span>
 					<span id=suggest class="orderTab" onclick=showThis('sug')>Suggested</span><br>
 					<div id=default class="order">
-						default
+						Loading... <img src="img/rotating_arrow.gif" />
 					</div>
 					<div id=suggest class="order">
-						suggest
+						Loading... <img src="img/rotating_arrow.gif" />
 					</div>
 				</td>
 			</tr>

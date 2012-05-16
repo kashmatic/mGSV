@@ -128,7 +128,9 @@ function generateOrder(){
 				else if(key == 'sug'){
 					suggestOrder(value);
 				}
-			})
+			});
+			showThis('def');
+			$('#rotate').css({'display': 'none'});
 		},
 		//* If error. show the error in console.log
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
