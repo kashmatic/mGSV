@@ -28,14 +28,14 @@ function synteny_table($newsession_id, $synfilename) {
 		## get the create statement
 		$createTable = "CREATE TABLE `{$newsession_id}_synteny` (
 			`id` int(10) NOT NULL AUTO_INCREMENT,
-			`org1` varchar(50) NOT NULL,
+			`org1` varchar(250) NOT NULL,
 			`org1_start` int(10) unsigned NOT NULL,
 			`org1_end` bigint(20) unsigned NOT NULL,
-			`org2` varchar(50) NOT NULL,
+			`org2` varchar(250) NOT NULL,
 			`org2_start` int(10) unsigned NOT NULL,
 			`org2_end` bigint(20) unsigned NOT NULL,
 			$userdef
-			`SYNcolor` varchar(100) DEFAULT NULL,
+			`SYNcolor` varchar(8) DEFAULT NULL,
 			PRIMARY KEY (`id`),
 			KEY `org1_start` (`org1_start`),
 			KEY `org1_end` (`org1_end`),
@@ -59,7 +59,7 @@ function annotation_table($newsession_id) {
 	$bool = 'true';
 	$createTable = "CREATE TABLE IF NOT EXISTS `{$newsession_id}_annotation` (
 		`id` int(10) NOT NULL AUTO_INCREMENT,
-		`org_id` varchar(50) NOT NULL,
+		`org_id` varchar(250) NOT NULL,
 		`start` int(20) unsigned NOT NULL,
 		`end` bigint(20) unsigned NOT NULL,
 		`strand` varchar(1) DEFAULT NULL,
