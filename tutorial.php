@@ -7,7 +7,7 @@
 
 	<link rel="stylesheet" href="css/homepage_tutorial.css" />
 	<style type="text/css">
-		fieldset{width:718px;border:1px #B0C0D1 solid;padding:40px;}
+		fieldset{width:1200px;border:1px #B0C0D1 solid;padding:40px;}
 		legend{background:#B0C0D1;padding:4px 10px;color:#000000;}
 	</style>
 	
@@ -128,7 +128,7 @@
 	<div id="page">
 		<? include ('lib/header.php') ?>
 		<div id="tutorial" class="section" style="padding:80px">
-			<fieldset style="width: 70%">
+			<fieldset>
 			<legend>Step-by-Step Tutorial</legend>
 			
 			<div class="section-content">

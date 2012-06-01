@@ -9,12 +9,42 @@
 		<script type="text/javascript" src="js/data.js"></script>
 		<LINK href="css/style.css" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="css/homepage_tutorial.css" />
-		
+		<style type="text/css">
+	.button {
+		background: #222 url('/mgsv/img/overlay.png') repeat-x;
+		display: inline-block;
+		padding: 5px 10px 5px;
+		color: #fff;
+		text-decoration: none;
+		text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+		border: 1px solid rgba(0,0,0,0.25);
+	}
+	.large.button {
+		font-size: 14px;                                          
+		padding: 5px 14px 5px 14px; 				
+	}
+	.blue.button { 
+		background-color: #2981e4; 
+	}
+	.round {
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+		-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+		-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+	}
+	.divline {
+		width: 100%;
+		background-color: gainsboro;
+		height: 33px;
+		min-width:500px;
+	}
+</style>
 	</head>
 	<body>
 		<? include ('lib/header.php') ?>
 		<br><br>
 		<input type=hidden id='session_id' value='<? echo $_GET['session_id'] ?>'>
+		<div style="width:1000px; text-align:center; color:#4682B4; font-weight:bold">Summary</div>
 		<table id="summary">
 			<tr>
 				<td style="width:300px" valign=top>
@@ -29,14 +59,10 @@
 			</tr>
 			<tr>
 				<td valign=top>
-					<h4 style="color: #4682B4">Select viewing order <span id="rotate" style="display:block; color: black;">Loading... <img src="img/rotating_arrow.gif" /></span></h4>
-					<span id=default class="orderTab" onclick=showThis('def')>From input file</span>
-					<span id=suggest class="orderTab" onclick=showThis('sug')>Suggested</span><br>
-					<div id=default class="order">
-						Loading... <img src="img/rotating_arrow.gif" />
-					</div>
-					<div id=suggest class="order">
-						Loading... <img src="img/rotating_arrow.gif" />
+					<h4 style="color: #4682B4">Select viewing mode 
+						<span id="rotate" style="display:block; color: black;">Loading... <img src="img/rotating_arrow.gif" /></span>
+					</h4>
+					<div id=default class="order" style="border:0px">
 					</div>
 				</td>
 			</tr>

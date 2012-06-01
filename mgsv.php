@@ -11,10 +11,17 @@
 		<LINK href="css/style.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
+		<?
+			$order = '';
+			if(isset($_GET['order'])){
+				$order = $_GET['order'];
+			}
+		?>
 		<section>
 		<? include ('lib/header.php') ?>
 		<br><br>
-		<div>
+		<? include ('lib/flip.php') ?>
+		<div style="clear:both">
 			<div style="float:left; padding: 10px;">
 				
 				<img src="img/zoomin.png" onclick="all_zoomin(' + id + ')" align="top">
@@ -28,14 +35,8 @@
 				</div>
 		</div>
 			<table></table>
-			<? 
-				$order = '0__ORDER__1';
-				if(isset($_POST['order'])){
-					$order = $_POST['order'];
-				}
-			?>
 			<input type=hidden id='display_order' value="<? echo $order ?>" > 
-			<input type=hidden id='session_id' value='<? echo $_POST['session_id'] ?>'>
+			<input type=hidden id='session_id' value='<? echo $_GET['session_id'] ?>'>
 			<div id="coord"></div>
 		</section>
 	</body>

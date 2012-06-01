@@ -106,6 +106,10 @@ if (isset($_POST['pro'])) {
 		#echo "($upload_dir)<br>";
 		## Get the first line
 		$header_line = exec( "head -n 1 tmp/".$newsession_id . $filename);
+		if($header_line == ''){
+			$bool_page = 'Synteny file: Unable to store in /tmp folder.';
+			return $bool_page;
+		}
 		## convert into array
 		$header_pieces = explode( "\t", $header_line);
 		
@@ -218,7 +222,7 @@ if (isset($_POST['pro'])) {
 				$values .= "'" . $num_of_items[$jj] . "',";
 			}
 			if(substr($num_of_items[0], 0, 250) == substr($num_of_items[3], 0, 250)){
-				$bool_page = "The first 50 characters of Org1 and Org2 are similar at line $line_number.";
+				$bool_page = "The first 250 characters of Org1 and Org2 are similar at line $line_number.";
 				break;
 			}
 			if($check_length == false){
@@ -407,7 +411,7 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 					</tr>
 					<tr>
 						<td>
-							<label for="annotation">Upload <a href="img/annotationImage.png" class="thickbox" title="The format of annotation file">annotation</a> file (Optional)&nbsp;<span class="formInfo"><a href="html/hint6.htm?width=375" class="jTip" id="seven" name=''>?</a></span></label>
+							<label for="annotation">Upload <a href="img/annotation.png" class="thickbox" title="The format of annotation file">annotation</a> file (Optional)&nbsp;<span class="formInfo"><a href="html/hint6.htm?width=375" class="jTip" id="seven" name=''>?</a></span></label>
 						</td>
 						<td>
 							<input type="file" id="file1" name="file1" class="{validate:{required:false,accept:'gz|txt|zip'}}" />

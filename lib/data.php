@@ -84,12 +84,32 @@ else if ($data == 'order'){
 		$assarr[array_search($row['org2'], $default)][array_search($row['org2'], $default)] = 0;
 		#echo array_search($row['org2'], $default) . "][ ". array_search($row['org2'], $default) . '<br>';
 	}
-	$array['def'] = join('__ORDER__', $default);
-	
-	foreach($default as $a){
-		//echo "$a<br>";
+	$array = join('__ORDER__', $default);
+}
+else if ($data == 'sorder'){
+	$query = "select distinct org1,org2 from ".$session_id."_synteny union select distinct org1,org2 from ".$session_id."_synteny ";
+	//echo $query,"<br>";
+	$result = mysql_query($query);
+	$default = array();
+	$assarr = array();
+	while($row = mysql_fetch_assoc($result)){
+		if( ! in_array($row['org1'], $default)){
+			array_push($default, $row['org1']);
+			$assarr[sizeof($assarr)] = array();
+		}
+		if( ! in_array($row['org2'], $default)){
+			array_push($default, $row['org2']);
+			$assarr[sizeof($assarr)] = array();
+		}
+		$assarr[array_search($row['org1'], $default)][array_search($row['org2'], $default)] = 1;
+		$assarr[array_search($row['org2'], $default)][array_search($row['org1'], $default)] = 1;
+		#echo array_search($row['org1'], $default) . "][ ". array_search($row['org2'], $default) . '<br>';
+		$assarr[array_search($row['org1'], $default)][array_search($row['org1'], $default)] = 0;		
+		#echo array_search($row['org1'], $default) . "][ ". array_search($row['org1'], $default) . '<br>';
+		$assarr[array_search($row['org2'], $default)][array_search($row['org2'], $default)] = 0;
+		#echo array_search($row['org2'], $default) . "][ ". array_search($row['org2'], $default) . '<br>';
 	}
-
+	
 	$a = FindOrder($assarr);
 	$sugg = array();
 	//echo sizeof($a),'<br>';
@@ -97,8 +117,9 @@ else if ($data == 'order'){
 		//echo $default[$b],"<br>";
 		array_push($sugg, $default[$b]);
 	}
-	$array['sug'] = join('__ORDER__', $sugg);
+	$array = join('__ORDER__', $sugg);
 }
+
 
 function FindOrder($graph){
 	$r = array();

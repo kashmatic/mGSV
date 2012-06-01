@@ -322,7 +322,51 @@ $(document).ready(function(){
 	session_id = $('#session_id').val();
 	// Get the array order to be displayed. 
 	getOrderArray(session_id);
+	graph_or_default();
 });
+
+function graph_or_default(){
+	graph = $("input#graph_value").val();
+	if(graph == 1){
+		//$('div#button_default').css({'display': 'block'});
+		$('div#info_bar > span').html('Organisms are arranged in optimized order.');
+	}
+	else{
+		$('div#info_bar > span').html('Organisms are arranged as provided in the uploaded synteny file.');
+		give_graph_option();
+	}
+}
+
+function give_graph_option(){
+	//* Use ajax to get JSON object
+	$.ajax({
+		//* file
+		url: 'lib/data.php',
+		data: { 
+			org: '', 
+			data: 'sorder',
+			session_id: session_id
+		},
+		//* datatype returned
+		dataType: 'json',
+		//* request method
+		method: 'GET',
+		//* If success
+		success: function(data){
+			console.log(data);
+			getHref = $('div#button_graph > a').attr('href');
+			$('div#button_graph > a').attr({'href': getHref + data + '&graph=1'});
+			$('div#button_graph').css({'display': 'block'});
+			$('div#info_bar > span').html('Organisms are arranged as provided in the uploaded synteny file. Click "Optimize order" to rearrange the organisms.');
+		},
+		//* If error. show the error in console.log
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log(textStatus+" - "+errorThrown);
+			console.log(XMLHttpRequest.responseText);
+		}
+	});
+	//console.log(arr);
+}
 
 function drawImage(){
 	var past = 0;

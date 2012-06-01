@@ -118,19 +118,10 @@ function generateOrder(){
 		method: 'GET',
 		//* If success
 		success: function(data){
-			$.each(data, function(key, value){
-				if(key == 'def'){
-					defaultOrder(value);
-				}
-				else if(key == 'ran'){
-					randomOrder(value);
-				}
-				else if(key == 'sug'){
-					suggestOrder(value);
-				}
-			});
-			showThis('def');
+			defaultOrder(data);
+			console.log(data);
 			$('#rotate').css({'display': 'none'});
+			$('div.order').css({'display': 'block'});
 		},
 		//* If error. show the error in console.log
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -142,46 +133,19 @@ function generateOrder(){
 }
 
 function defaultOrder(value){
-	var html = '<form action="mgsv.php" method="POST">\
+	var html = '<p>\
+<form action="mgsv.php" method="GET">\
 <input type="hidden" name="session_id" value="' + session_id + '">\
 <input type="hidden" name="order" value="' + value + '">\
-<input type="submit" class="input_button" value="Visualize">\
+<input type="submit" class="large button blue round" value="Pairwise view">\
 </form><p>';
-	var oarr = value.split('__ORDER__');
-	$.each(oarr, function(key, value){
-		html += value + '<br>';
-	});
-	html += '</p>';
-	showThis('def');
+  html += '<p>\
+<form action="base_mgsv.php" method="GET">\
+<input type="hidden" name="session_id" value="' + session_id + '">\
+<input type="hidden" name="order" value="' + value + '">\
+<input type="submit" class="large button blue round" value="Multiple view">\
+</form><p>';
 	$("div#default").html(html);
-	//console.log(html);
-}
-
-function randomOrder(value){
-	var html = '<p>';
-	var oarr = value.split('__ORDER__');
-	$.each(oarr, function(key, value){
-		html += value + '<br>';
-	});
-	html += '</p><a href="mgsv.php?session_id=' + session_id + '&order=' + value + '" >Visualize</a>';
-	showThis('ran');
-	$("div#random").html(html);
-	//console.log(html);
-}
-
-function suggestOrder(value){
-	var html = '<form action="mgsv.php" method="POST">\
-<input type="hidden" name="session_id" value="' + session_id + '">\
-<input type="hidden" name="order" value="' + value + '">\
-<input type="submit" class="input_button" value="Visualize">\
-</form><p>';
-	var oarr = value.split('__ORDER__');
-	$.each(oarr, function(key, value){
-		html += value + '<br>';
-	});
-	html += '</p>';
-	showThis('sug');
-	$("div#suggest").html(html);
 	//console.log(html);
 }
 
@@ -322,19 +286,3 @@ Raphael.fn.syn = function(paper, set1, set1_count, set2, set2_count, color){
 	});
 	//group.attr({ cursor: 'pointer' });
 }
-
-function showThis(id){
-	if(id == 'def'){
-		$("span#default").css({'background-color': "#4682B4", 'color': 'white'});
-		$("span#suggest").css({'background-color': 'white', 'color': 'black'});
-		$("div#default").css('display', 'block');
-		$("div#suggest").css('display', 'none');
-	}
-	else if(id == 'sug'){
-		$("span#default").css({'background-color': 'white', 'color': 'black'});
-		$("span#suggest").css({'background-color': "#4682B4", 'color': 'white'});
-		$("div#default").css('display', 'none');
-		$("div#suggest").css('display', 'block');
-	}
-}
-

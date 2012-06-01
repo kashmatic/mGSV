@@ -45,6 +45,15 @@ table th{
 	font-weight: bold;
 }
 
+.base_control {
+	width: 200px;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	background-color: #4682B4;
+	color: white;
+}
+
 .light {
 	background-color: #B0C4DE;
 	color: black;
@@ -131,7 +140,6 @@ table#assoc td{
 
 .order {
 	width: 280px;
-	display: none;
 	border: 1px solid #4682B4;
 	padding: 10px;
 	margin-top: 5px;
