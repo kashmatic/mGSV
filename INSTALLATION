@@ -91,7 +91,10 @@ Section IV: Web Service (Optional):
 	mGSV Web Service depends on JDK 1.6+. To check whether you have the required JDK installed execute following command
 		shell> java -version
 
-	Output is similar to : java version "1.7.0_03", If java version is less than 1.6, upgrade java using
+	If "No command 'java' found ... ", java is not installed or not configure properly. To install java
+		shell> apt-get install openjdk-6-jdk
+
+	If java version is less than 1.6, upgrade java using
 		shell> apt-get install openjdk-6-jdk
 
 2. Run Web Service
