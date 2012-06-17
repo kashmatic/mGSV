@@ -86,7 +86,38 @@ The script cleanup.php will be executed at 4:30 AM every morning.
 
 9. When installation completes, you can now open Install/index.php (i.e., http://<YOUR_SERVER_DOMAIN_NAME>/mgsv/Install/), which verifies prerequisites, database setup, and installation. YOUR_SERVER_DOMAIN_NAME refers to the domain name of your server.
 
-Section IV: Additional notes:
+Section IV: Web Service (Optional):
+1. Check Java version, upgrade if necessary
+	mGSV Web Service depends on JDK 1.6+. To check whether you have the required JDK installed execute following command
+		shell> java -version
+
+	Output is similar to : java version "1.7.0_03", If java version is less than 1.6, upgrade java using
+		shell> apt-get install openjdk-6-jdk
+
+2. Run Web Service
+	shell> cd /var/www/mgsv/ws
+	shell> java -jar ws-server-1.0RC1-jar-with-dependencies.jar
+	shell> <PRESS CTRL+Z>
+	shell> bg
+
+3. Stop Web Service
+	shell> ps aux | grep ws-server-1.0RC1-jar-with-dependencies.jar
+	*Note the process id from the output.
+	shell> kill -9 <process id>
+
+4. Configuration
+	Configuration file has the format of key:value and is present in the same directory as ws-server-1.0RC1-jar-with-dependencies.jar
+	shell> cd /var/www/mgsv/ws
+	shell> <your editor> config.properties
+
+	Configuration Options
+	mgsv_upload_url=http://<YOUR_SERVER_DOMAIN_NAME>/mgsv	
+	ws_publish_url=http\://<YOUR_SERVER_DOMAIN_NAME>\:8081/MGSVService
+	mgsv_summary_url=http\://<YOUR_SERVER_DOMAIN_NAME>/mgsv/summary.php?session_id\=
+
+	You need to stop the web service and start again if configration is changed after starting Web Service
+
+Section V: Additional notes:
 
 1. For troubleshooting, please use the contact details at http://cas-bioinfo.cas.unt.edu/mgsv/mgsvcontact.php
 2. Refer to the ARCHITECTURE.txt file to understand the architecture of mGSV.
