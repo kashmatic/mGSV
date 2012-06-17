@@ -118,7 +118,9 @@ Section IV: Web Service (Optional):
 	ws_publish_url=http\://<YOUR_SERVER_DOMAIN_NAME>\:8081/MGSVService
 	mgsv_summary_url=http\://<YOUR_SERVER_DOMAIN_NAME>/mgsv/summary.php?session_id\=
 
-	You need to stop the web service and start again if configration is changed after starting Web Service
+	You need to stop the web service and start again if configration is changed after starting Web Service.
+	You generally do not need to change configuration, as default configuration looks assumes mGSV server running
+	on the same machine. It communicates over localhost and listens on port 8081 of all interfaces.
 
 Section V: Additional notes:
 
