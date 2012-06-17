@@ -86,7 +86,133 @@ The script cleanup.php will be executed at 4:30 AM every morning.
 
 9. When installation completes, you can now open Install/index.php (i.e., http://<YOUR_SERVER_DOMAIN_NAME>/mgsv/Install/), which verifies prerequisites, database setup, and installation. YOUR_SERVER_DOMAIN_NAME refers to the domain name of your server.
 
-Section IV: Additional notes:
+Section IV: Web Service (Optional):
+
+Web service is an optional component of mGSV. The goal of this part of the installation are to:
+	1. Install Web Service using source or binary files that comes with mGSV distribution.
+	2. Run or Stop Web Service as a background job
+	3. Verify following artefacts are available for client or software developers to use the Web Service
+
+		a. WSDL File (XML Based Specification for web Service)
+			- Needed for developers to create helper classes and know the method signature for web service.
+			- After successful installation and running this file is available at:
+				http://<YOUR_SERVER_DOMAIN_NAME>:8081/MGSVService?wsdl
+
+		b. An url where client can connect to consume the web service
+			- Needed for developers to connect and use the web service.
+			- Needed for client application user to connect and upload synteny data
+			- Available at
+				http://<YOUR_SERVER_DOMAIN_NAME>:8081/MGSVService
+
+		c. A reference documentation that explains the services
+			- Software developement reference guide for client developers.
+			- Explains the service in detail
+			- available at:
+				http://<YOUR_SERVER_DOMAIN_NAME>/ws/client-reference.txt
+		
+		All three urls in (a,b,c) can be verified by visiting them using browser.
+			a. XML File
+			b. Small note or a blank screen
+			d. Documentation file
+
+A. Installation from Binary
+	1. Check Java version, upgrade if necessary
+		mGSV Web Service depends on JDK 1.6+. To check whether you have the required JDK installed execute following command
+			shell> java -version
+	
+		If "No command 'java' found ... ", java is not installed or not configured properly. To install java
+			shell> apt-get install openjdk-6-jdk
+	
+		If java version is less than 1.6, upgrade java using
+			shell> apt-get install openjdk-6-jdk
+	
+	2. Run Web Service
+		shell> cd /var/www/mgsv/ws
+		shell> java -jar ws-server-1.0RC1-jar-with-dependencies.jar
+		shell> <PRESS CTRL+Z>
+		shell> bg
+	
+	3. Stop Web Service
+		shell> ps aux | grep ws-server-1.0RC1-jar-with-dependencies.jar
+		*Note the process id from the output.
+		shell> kill -9 <process id>
+	
+	4. Configuration
+		Configuration file has the format of key:value and is present in the same directory as ws-server-1.0RC1-jar-with-dependencies.jar
+		shell> cd /var/www/mgsv/ws
+		shell> <your editor> config.properties
+	
+		Configuration Options
+		mgsv_upload_url=http://<YOUR_SERVER_DOMAIN_NAME>/mgsv	
+		ws_publish_url=http\://<YOUR_SERVER_DOMAIN_NAME>\:8081/MGSVService
+		mgsv_summary_url=http\://<YOUR_SERVER_DOMAIN_NAME>/mgsv/summary.php?session_id\=
+	
+		You need to stop the web service and start again if configration is changed after starting Web Service.
+		You generally do not need to change configuration, as default configuration looks assumes mGSV server running
+		on the same machine. It communicates over localhost and listens on port 8081 of all interfaces.
+
+B. Installation from Source
+	Web Service Server part of the code uses Standard JDK Library, which comes with the default installation of the JDK 
+	for the web services functionality. Apache HTTP Components library is used to communicate with the mGSV Server.
+
+		Apache Maven is used to manage the library dependencies and automate the build process. Overall requirement to install and run
+		from sources are:
+
+			1. JDK 1.6+ (See IV.A.1 for verification and installation)
+			2. Maven 2.0+
+			3. Computer connected to the internet during the build process
+
+			* All other dependencies are downloaded automatically by Maven from Apache Central Maven Library Repository
+			during the build process.
+			* Default installation of Maven is very minimal, if you are using maven for the first time, it might take a
+			while as it has to download its own plugins for packaging and compiling.			
+	
+	1. Check Maven Installation, Install if necessary
+		shell> mvn --version
+		
+		If "No command 'mvn' found ... ", Maven is not installed or not configure properly. To install Maven
+			shell> apt-get install maven2
+		If version is less than 2.0, following command upgrades the existing maven.
+			shell> apt-get install maven2
+
+	2. Build the source
+		Source is distributed with the main distribution under mgsv/ws folder as an archive ws-server-src.tar.gz
+
+		a. Decompress the source archive
+			shell> cd /var/www/mgsv/ws
+			shell> tar -xzf ws-server-src.tar.gz
+
+			Note: Structure of the source folder (/var/www/mgsv/ws-server-src)
+				src/ 			: Source folder
+				config.properties 	: Configuration file
+				pom.xml			: Maven Build Configuration file
+				
+			Note: src/edu/unt/mgsv/MGSVService.java is the main java file that contains the Web Service
+			implementation. Code is extensively documented to incoperate changes. The Archetecture guide
+			has further information about inner working of this file.		
+
+
+		b. Make binary from source using Maven
+			shell> cd /var/www/mgsv/ws-server-src
+			shell> mvn package
+
+			* This command downloads required dependencies and creates a executable 
+			binary, a java jar file, (ws-server-1.0RC1-jar-with-dependencies.jar) under folder 'target'. This
+			file is stand alone binary and contains all the necessary libraries. Only requirement to run this
+			binary would be a JDK 1.6+
+
+		c. Copy binary file and a configuration folder to ws directory
+			shell> cd /var/www/mgsv/ws-server-src/target/
+			* Following step will overwrite the binary file that comes with default distribution.
+			shell> cp ws-server-1.0RC1-jar-with-dependencies.jar /var/www/mgsv/ws/
+			shell> cd ..
+			* Skip following step if you have already run from binary and made changes to conf.properties
+			shell> cp config.properties /var/www/mgsv/ws/
+
+		d. Follow IV.A ('Installation from binary' to run the binary file just produced).
+			
+
+Section V: Additional notes:
 
 1. For troubleshooting, please use the contact details at http://cas-bioinfo.cas.unt.edu/mgsv/mgsvcontact.php
 2. Refer to the ARCHITECTURE.txt file to understand the architecture of mGSV.
