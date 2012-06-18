@@ -2,10 +2,9 @@
 	<li><a href="#" rel="tab1" class="selected">Synteny file</a></li>
 	<li><a href="#" rel="tab2">Annotation file</a></li>
 	<li><a href="#" rel="tab3">Upload Synteny</a></li>
-	<!--
-		<li><a href="#" rel="tab4">Summary</a></li>
-	-->
-	<li><a href="#" rel="tab5">Visualization</a></li>
+	<li><a href="#" rel="tab4">Summary page</a></li>
+	<li><a href="#" rel="tab5">Pairwise page</a></li>
+	<li><a href="#" rel="tab6">Multiple page</a></li>
 	<!--
 		<li><a href="#" rel="tab6">Video tutorial</a></li>
 	-->
@@ -21,10 +20,22 @@
 	<div id="tab3" class="tabcontent">
 		<?php include("html/upload_synteny.html"); ?>
 	</div>
+	<div id="tab4" class="tabcontent">
+		<a href="img/summary-figure.png" target="_blank">
+			<img src="img/summary-figure.png" width="1200px" border="0px">
+		</a>
+	</div>
 	<div id="tab5" class="tabcontent">
-		<?php include("html/visualization_synteny_annotation.html"); ?>	
+		<a href="img/pairwise-figure.png" target="_blank">
+			<img src="img/pairwise-figure.png" width="1200px" border="0px">
+		</a>
 	</div>
 	<div id="tab6" class="tabcontent">
+		<a href="img/multiple-figure.png" target="_blank">
+			<img src="img/multiple-figure.png" width="1200px" border="0px">
+		</a>
+	</div>
+	<div id="tab7" class="tabcontent">
 		<br>
 		The video can be downloaded <a href="GSVTutorial.m4v" target="_blank">here</a> 
 		<br>

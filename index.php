@@ -1,51 +1,104 @@
 <?php
 $bool_page = '';
+$synfilename = '';
+$annfilename = '';
+$newsession_id = '';
+$upload_dir = '';
+
+function save_uploaded_file($id, $type){
+	global $newsession_id, $upload_dir, $synfilename, $annfilename;
+
+	## Get file handler
+	$new_file = $_FILES[$id];
+	## Get file name
+	$file_name = $new_file['name'];
+	if($file_name == ""){
+		return "false";
+	}
+	## correct the filename
+	$file_name = str_replace(' ', '_', $file_name);
+	## locate the path to temp location of the file
+	$file_tmp = $new_file['tmp_name'];
+	## Get the file size
+	$file_size = $new_file['size'];
+	## If the file is uploaded
+	if( is_uploaded_file( $file_tmp)){
+		## Move the file from temporary location to /tmp folder 
+		$bool_move_file = move_uploaded_file( $file_tmp, $upload_dir . $newsession_id . $file_name);
+		if(! $bool_move_file){
+			#$bool_page = "Unable to copy file to the $upload_dir folder. Please check the permissions.";
+			return "Unable to copy file to the $upload_dir folder. Please check the permissions.";
+		}
+	}
+	($type == 'syn') ? $synfilename = $file_name : $annfilename = $file_name;
+	return 'true';
+}
+
+function save_url_file($id, $type){
+	global $newsession_id, $upload_dir, $synfilename, $annfilename;
+	
+	$url_path = $_POST[$id];
+	if($url_path == ''){
+		return 'false';
+	}
+	if(
+			( substr($url_path, -4) === '.txt') || 
+			( substr($url_path, -4) === '.zip') || 
+			( substr($url_path, -3) === '.gz')
+	){
+		$url = explode('/', $url_path);
+		$ok = copy($url_path, $upload_dir . $newsession_id . $url[sizeof($url) - 1]);
+		if(! $ok){
+			return "$url_path is not correct";
+		}
+	}
+	else {
+		return "URL($url_path) doesnt end with .txt or .zip or .gz ";
+	}	
+	($type == 'syn') ? $synfilename = $url[sizeof($url) - 1] : $annfilename = $url[sizeof($url) - 1];
+	return 'true';
+}
+
 /**
  * $_POST['pro'] = submit
  * This if works only after submission
  */
-if (isset($_POST['pro'])) {
-	$bool_page = 'true';
-	## Get the current time zone
-	date_default_timezone_set('America/Mexico_City');
-	## Create a session id with date and process id
-	$newsession_id = date('tniHYsu') . getmypid();
+function save_files(){
+	global $newsession_id, $upload_dir, $synfilename, $annfilename;
 
+	date_default_timezone_set('America/Mexico_City');
+	$newsession_id = date('tniHYsu') . getmypid();
+	
 	## Get the upload directory and database settings
 	require_once("lib/settings.php");
 	## connect to the database
 	require_once("lib/database.php");
-	
-	## Initialize array to hold the filename
-	$filename = array();
-	## Initialize the total uploads to 2
-	$total_uploads = "2";
-	## Loop over the two uplaoded files
-	for ($i = 0; $i < $total_uploads; $i++) {
-		## Get file handler
-		$new_file = $_FILES['file' . $i];
-		## Get file name
-		$file_name = $new_file['name'];
-		## correct the filename
-		$file_name = str_replace(' ', '_', $file_name);
-		## locate the path to temp location of the file
-		$file_tmp = $new_file['tmp_name'];
-		## Get the file size
-		$file_size = $new_file['size'];
-		## If the file is uploaded
-		if( is_uploaded_file( $file_tmp)){
-			#echo $upload_dir . $file_name. '<br>';
-			## Move the file from temporary location to /tmp folder 
-			move_uploaded_file( $file_tmp, $upload_dir . $newsession_id . $file_name);
-			## store the filename.
-			array_push( $filename, $file_name);
+	$upload_dir = $upload_dir;
+
+	$bool_page = save_uploaded_file('file0', 'syn');
+	if($bool_page != 'true'){
+		$bool_page = save_url_file('syn_url', 'syn');
+		if($bool_page != 'true'){
+			if((! isset($_POST['syn_default'])) && ($bool_page == 'false')){
+				return "Synteny file is required"; 
+			}
+			return $bool_page;
+		}
+	}
+	$out = save_uploaded_file('file1', 'ann');
+	if($out != 'true'){
+		$out = save_url_file('ann_url', 'ann');
+		if($out != 'false'){
+			return $out;
 		}
 	}
 	
+	return $bool_page;
+}	
+	
+function req(){
 	## Require the file with commands to create synteny and annotation tables
 	require_once ("lib/databasetable.php");
-	#require_once ("lib/reportinvalidfile_mod.php");
-	$synfilename = $filename[0];
 	## Require thr email file to send email
 	require_once ("lib/emailsystem.php");
 	
@@ -53,51 +106,54 @@ if (isset($_POST['pro'])) {
 	if ($_POST["email"] != '') {
 		$email = mysql_real_escape_string($_POST["email"]);
 	}
+}
 
-	function stringlenforzip($value, $trim) {
-		$num1 = strlen($value);
-		$totalnum = $num1 - 4;
-		$stringlen = substr("$value", 0, $totalnum);
-		return $stringlen;
-	}
+function stringlenforzip($value, $trim) {
+	$num1 = strlen($value);
+	$totalnum = $num1 - 4;
+	$stringlen = substr("$value", 0, $totalnum);
+	return $stringlen;
+}
 
-	function stringlen($value, $trim) {
-		$num1 = strlen($value);
-		$totalnum = $num1 - 3;
-		$stringlen = substr("$value", 0, $totalnum);
-		return $stringlen;
-	}
+function stringlen($value, $trim) {
+	$num1 = strlen($value);
+	$totalnum = $num1 - 3;
+	$stringlen = substr("$value", 0, $totalnum);
+	return $stringlen;
+}
 	
-	## To unzip the uploaded files
-	## for each uploaded file
-	for( $i = 0; $i < sizeof($filename); $i++){		
-		#echo $filename[$i].'<br>';
-		## Get the complete path
-		$path = $upload_dir . $newsession_id . $filename[$i];
-		## get the extension of the uploaded file
-		$ext = strrchr($filename[$i], ".");
-		## if it is of *.gz format
-		if( strtolower($ext) == '.gz'){
-			## gunzip it
-			exec("gunzip $path");
-			## update the synteny filename
-			$filename[$i] = stringlen($filename[$i], ".");
-		} 
-		## if the file is of *.zip format
-		elseif( strtolower($ext) == '.zip') {
-			## unzip it
-			exec("unzip -d $upload_dir $path");
-			## update the filename
-			$filename[$i] = stringlenforzip($filename[$i], ".");
-			## delete the uploaded file
+## To unzip the uploaded files
+## for each uploaded file
+function uncompress_files($filename){
+	global $newsession_id, $upload_dir;
+	## Get the complete path
+	$path = $upload_dir . $newsession_id . $filename;
+	## get the extension of the uploaded file
+	$ext = strrchr($filename, ".");
+	## if it is of *.gz format
+	if( strtolower($ext) == '.gz'){
+		## gunzip it
+		exec("gunzip $path");
+		## update the synteny filename
+		$filename = stringlen($filename, ".");
+	} 
+	## if the file is of *.zip format
+	elseif( strtolower($ext) == '.zip') {
+		## unzip it
+		exec("unzip -d $upload_dir $path");
+		## update the filename
+		$filename = stringlenforzip($filename, ".");
+		## delete the uploaded file
+		if(file_exists($path)){
 			unlink($path);
 		}
-	} ## for
-	#print_r($filename);
+	}
+	return $filename;
+}
 
-	/**
-	 * Go thru the synteny file and upload the information into 
-	 */
+/**
+ * Go thru the synteny file and upload the information into 
+ */
 	function syn($filename) {
 		$bool_page = 'true';
 		#echo "($filename[0])<br>";
@@ -221,36 +277,53 @@ if (isset($_POST['pro'])) {
 			for ($jj = 0; $jj < count($num_of_items); $jj++) {
 				$values .= "'" . $num_of_items[$jj] . "',";
 			}
+			## check for the first 250 characters of org1 and org2
 			if(substr($num_of_items[0], 0, 250) == substr($num_of_items[3], 0, 250)){
-				$bool_page = "The first 250 characters of Org1 and Org2 are similar at line $line_number.";
+				## If they are similar they throw an error and quit
+				$bool_page = "Synteny File: Org1 and Org2 are similar at line $line_number.";
 				break;
 			}
+			## If there is no column called length in the input synteny file
 			if($check_length == false){
+				## get the difference between start and end of org2
 				$org2 = abs($num_of_items[4] - $num_of_items[5]) + 1;
+				## get the difference between start and end of org1
 				$org1 = abs($num_of_items[1] - $num_of_items[2]) + 1;
+				## get the minimum of the above two lengths
 				$minlength = min($org1, $org2);
+				## concatenate this minimum value to the input command
 				$values .= "'" . $minlength . "',";
 			}
+			## generate a random color to store each synteny
 			$values .= "'" .  getRandomColorHex() . "')";
-			#echo "168: $bool<br>";
+			
+			## If everything is good
 			if( $bool_page == 'true'){
 				## Insert the values into the table
 				$sql = "insert into {$newsession_id}_synteny ($insert_into) $values";
 				## show the statement
-				#echo "171: $sql<br>";
+				#echo "insert command: $sql<br>";
 				## execute the statement
 				$result = execute_sql($sql);
 			}
 		}
 		## Delete the files from server
-		unlink($upload_dir . $newsession_id . $filename);
+		if(file_exists($upload_dir . $newsession_id . $filename)){
+			unlink($upload_dir . $newsession_id . $filename);
+		}
+		## return the boolean parameter
 		return $bool_page;
 	}
 
-
+	/**
+	 * Function to deal with the uploaded annotation file
+	 */
 	function annotation($annfilename) {
+		## preset the boolean to true
 		$bool_page = 'true';
+		## get the global parameters
 		global $upload_dir, $newsession_id, $email, $filename;
+		## start the line counter at 0
 		$counter = 0;
 		
 		## Get the field names
@@ -287,7 +360,7 @@ if (isset($_POST['pro'])) {
 				$bool_page = "Annotation file: line number $line_number is not in correct format";
 				break;
 			}
-			#echo "($line)<br>";
+			#echo "($line)<br>";localhost
 			$num_of_items = explode("\t", $line);
 			$values = "VALUES('" . implode("','", $num_of_items) . "')";
 			#echo "224: $bool<br>";
@@ -301,23 +374,43 @@ if (isset($_POST['pro'])) {
 			}
 		}
 		## Delete the files from server
-		unlink($upload_dir . $newsession_id . $annfilename);
+		if(file_exists($upload_dir . $newsession_id . $annfilename)){
+			unlink($upload_dir . $newsession_id . $annfilename);
+		}
 		return $bool_page;
 	}
 
+if (isset($_POST['pro'])) {
+	if($_POST['syn_default'] == 'syn_default'){
+		if($_POST['ann_default'] == 'ann_default'){
+			header("Location:summary.php?session_id=306241420125500000022322");
+		} else {
+			header("Location:summary.php?session_id=306271420125100000024316");
+		}
+	}
+	
+	$bool_page = save_files();
+	
+	if( $bool_page == 'true'){
+		$synfilename = uncompress_files($synfilename);
+		$annnfilename = uncompress_files($annfilename);
+	}
+
+	req();
+
 	## Load the synteny file into the database
 	if( $bool_page == 'true'){
-		$bool_page = syn($filename[0]);
+		$bool_page = syn($synfilename);
 	}
-	
+
 	## Delete the wrong files
-	if( $bool_page != 'true'){
-		unlink($upload_dir . $newsession_id . $filename[0]);
+	if(( $bool_page != 'true') && (file_exists($upload_dir . $newsession_id . $synfilename))){
+		unlink($upload_dir . $newsession_id . $synfilename);
 	}
 	
-	if((sizeof($filename) > 1) && ( $bool_page == 'true')){
-		$bool_page = annotation_table( $newsession_id);
-		$bool_page = annotation($filename[1]);
+	if(($annfilename != '') && ( $bool_page == 'true')){
+		$bool_page = annotation_table($newsession_id);
+		$bool_page = annotation($annfilename);
 	}
 	
 	if(($email != "") && ( $bool_page == 'true')){
@@ -330,6 +423,9 @@ if (isset($_POST['pro'])) {
 	}
 }
 
+/**
+ * Function to generate a random color.
+ */
 function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 	return sprintf( '#%02X%02X%02X', rand(0,$max_r), rand(0,$max_g), rand(0,$max_b) );
 }
@@ -351,20 +447,6 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 
-
-		<script type="text/javascript">
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-20901299-3']);
-			_gaq.push(['_trackPageview']); (function() {
-				var ga = document.createElement('script');
-				ga.type = 'text/javascript';
-				ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0];
-				s.parentNode.insertBefore(ga, s);
-			})();
-
-		</script>
 		<script>
 			$(document).ready(function(){
 				if($.browser.msie){
@@ -373,11 +455,7 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 				console.log($.browser);
 				$('#MgsvForm').submit(function(){
 					$('#rotate').css({'display': 'block'});
-					if($('#file0').val() == ''){
-						$('#file0_error').html('Synteny file is required.');
-						$('#rotate').css({'display': 'none'});
-						return false;
-					}
+					$('div#error_div').html('');
 					var pattern = new RegExp(/^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/i);
 					emailAddress = $('#email').val();
 					if((emailAddress != '') && (! pattern.test(emailAddress))){
@@ -396,48 +474,71 @@ function getRandomColorHex($max_r = 255, $max_g = 255, $max_b = 255) {
 		<div align="center">
 			<img src="img/mGSV_logo_600px.png" style="">
 			<form id="MgsvForm" method="post" action="" enctype="multipart/form-data">
-				<table class="inputTable">
+				<table class="inputTable round">
 					<tr>
-						<td valign="top">
-							<label for="file0">Upload <a href="img/syntenyImage.png" class="thickbox" title="The format of synteny file">synteny</a> file (Required)&nbsp;<span class="formInfo"><a href="html/hint5.htm?width=375" class="jTip" id="six" name=''>?</a></span></label>
+						<td valign="top" class="round" rowspan="2" style="height:250px">
+							<H4 align="center" style="border-bottom: 1px solid black; padding: 0px 0px 10px 0px;">
+								<a href="img/syntenyImage.png" class="thickbox" title="The format of synteny file">Synteny File (required)</a> 
+								<span class="formInfo"><a href="html/hint5.htm?width=375" class="jTip" id="six" name=''>?</a></span>
+							</H4>
+							<br>
+							<label for="file0">Upload synteny file</label>
+							<br>
+							<input type="file" id="file0" name="file0" />
+							<br><br>
+							<h5 style="color:#008080">or</h5>
+							<label>Provide URL to Synteny file</label>
+							<br>
+							<input type="text" id="syn_url" name="syn_url" style="width:400px"/>
+							<br><br>
+							<h5 style="color:#008080">or</h5>
+							<label>Use the sample synteny file</label>
+							<br>
+							<input type="checkbox" name="syn_default" value="syn_default">  sample_synteny.txt (<a href="sample_synteny.txt">download</a>)
 						</td>
-						<td valign="top" width="300px">
-							<input type="file" id="file0" name="file0" /><br>
-							<span id="file0_error" style="color: red;"></span>
-						</td>
-						<td valign="top">
-							<a href="sample_synteny.txt">Download synteny file</a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="annotation">Upload <a href="img/annotation.png" class="thickbox" title="The format of annotation file">annotation</a> file (Optional)&nbsp;<span class="formInfo"><a href="html/hint6.htm?width=375" class="jTip" id="seven" name=''>?</a></span></label>
-						</td>
-						<td>
+						<td valign="top" class="round" rowspan="2">
+							<H4 align="center" style="border-bottom: 1px solid black; padding: 0px 0px 10px 0px;">
+								<a href="img/annotation.png" class="thickbox" title="The format of annotation file">Annotation File	(optional)</a>
+								<span class="formInfo"><a href="html/hint6.htm?width=375" class="jTip" id="seven" name=''>?</a></span>
+							</H4>
+							<br>
+							<label for="annotation">Upload annotation file</label>
+							<br>
 							<input type="file" id="file1" name="file1" class="{validate:{required:false,accept:'gz|txt|zip'}}" />
+							<br><br>
+							<h5 style="color:#008080">or</h5>
+							<label>Provide URL to Annotation file</label>
+							<br>
+							<input type="text" id="ann_url" name="ann_url" style="width:400px"/>
+							<br><br>
+							<h5 style="color:#008080">or</h5>
+							<label>Use the sample annotation file</label>
+							<br>
+							<input type="checkbox" name="ann_default" value="ann_default">  sample_annotation.txt (<a href="sample_annotation.txt">download</a>)
 						</td>
-						<td>
-							<a href="sample_annotation.txt">Download annotation file</a></td>
-					</tr>
-					<tr>
-						<td>
-							<label for="email">Email (Optional)&nbsp;<span class="formInfo"><a href="html/hint1.htm?width=375" class="jTip" id="five" name=''>?</a></span></label>
-						</td>
-						<td>
+						<td valign="top" class="round">
+							<H4 align="center" style="border-bottom: 1px solid black; padding: 0px 0px 10px 0px;">
+								Email (Optional)
+								<span class="formInfo"><a href="html/hint1.htm?width=375" class="jTip" id="five" name=''>?</a></span>
+							</H4>
+							<br>
+							<label>Valid Email address.</lable>
+							<br>
 							<input id="email" name="email" /><br>
 							<span id="email_error" style="color: red;"></span>
 						</td>
 					</tr>
 					<tr>
-						<td></td>
-						<td>
-							<input class="submit" type="submit" id="pro" name="pro" value="Submit" /><br>
-							<span id="rotate" style="display:none">Loading... <img src="img/rotating_arrow.gif" /></span>
+						<td class="round" align="center" style="height:200px">
+							<input class="large button blue round" type="submit" id="pro" name="pro" value="Submit" /><br>
+							<span id="rotate" style="display:none; color: green">Loading... <img src="img/rotating_arrow.gif" /></span>
+							<br>
+							<input class="large button blue round" type="reset" value="Reset" /><br>
 						</td>
 					</tr>
 				</table>
 			</form>
-			<div style="border 1px solid red; color: red">
+			<div style="border 5px solid red; color: red" id="error_div">
 			<? 
 				if(($bool_page != 'true') && ($bool_page != '')){
 					echo "ERROR.<br>";

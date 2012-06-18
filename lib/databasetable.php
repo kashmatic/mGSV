@@ -63,7 +63,7 @@ function annotation_table($newsession_id) {
 		`start` int(20) unsigned NOT NULL,
 		`end` bigint(20) unsigned NOT NULL,
 		`strand` varchar(1) DEFAULT NULL,
-		`feature_name` varchar(100) DEFAULT NULL,
+		`feature_name` text DEFAULT NULL,
 		`feature_value` real DEFAULT NULL, 
 		`track_name` varchar(100) NOT NULL,
 		`track_shape` varchar(100) NOT NULL,

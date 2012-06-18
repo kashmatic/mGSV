@@ -1,0 +1,132 @@
+MGSV WEB SERVICE CLIENT
+=======================
+
+mGSV comes with an optional Web Service Component, when active it allows remote clients to upload synteny and annotation files using Web Service Protocol. An example client application that uses this protocol to upload local files and public urls is implemented. This documentation is gives a high level overview of the Web Service from the client's point of view. Shows how to use the example client application using its binary file as well as building the binary file from the sources. The final section is a guide to a Java programmer to build web service using simple java development tools.
+
+1. Overview
+-----------
+
+mGSV is distributed with a binary file for an optional Web Service component. 
+It needs to be run alongside the main mGSV web server. 
+The procedure to start Web Service component is explained in INSTALLATION.txt.
+
+Once started, the Web Service is available to communicate with clients at
+http://<MGSV_INSTALL_DIMAIN>:8081/MGSVService
+
+All clients including this one uses this URL to communicate with the mGSV Web Service System.
+
+1.1. Brief Overview of Web Services
+-----------------------------------
+
+Web Service is an arrangement for the RPC (Remote Procedure Call), in which a client can call and receive a response from server's functions(procedures)using XML over HTTP Protocol. SOAP (Simple Object Access Protocol) is an industrial standard that provides the specification for the structure of the XML messages passed between client and the server.
+
+1.2. Roles of Server and Client
+-------------------------------
+
+Server needs to provide WSDL (Web Services Description Language) File, which is a XML Document describing the specification of the procedures that the Web Service provides. Server also needs to provide a End Point, which is a permanent URL for the clients to connect to. The server listens to XML-SOAP requests at given end point and responds with XML-SOAP encoded results after a successful completion of the procedure.
+Client makes use of WSDL to encode the XML-SOAP requests by confirming to exact specification as required by the server. Client then passes the request for Remote Procedure Call at the End Point URL as a XML-SOAP encoded request over the HTTP protocol. Client gets the results in XML-SOAP encoded format from the server upon the successful completion of the procedure.
+
+2. Install and Execute client application
+-----------------------------------------
+
+A. Required
+
+- Java 1.6+
+
+B. Working directory 
+
+- We assume /opt/mgsv as a working directory
+- Create the directory if required and all commands below are executed at this directory unless specified otherwise.
+
+	shell> mkdir /opt/mgsv
+	shell> cd /opt/mgsv
+
+C. Download Jar file 
+
+	shell> wget http://cas-bioinfo.cas.unt.edu/ws/ws-client-1.0-RC3-jar-with-dependencies.jar
+
+D. Download sample synteny and annotation file.
+
+	shell> wget http://cas-bioinfo.cas.unt.edu/sample_synteny.txt
+	shell> wget http://cas-bioinfo.cas.unt.edu/sample_annotation.txt
+
+E. Create configuration file
+
+- to specify the address of mGSV server
+
+	shell> echo "remote=http\://cas-genome.cas.unt.edu:8081/MGSVService" > config.properties
+
+F. Initiate web service
+
+- Use the downlaoded jar file, along with sample synteny and annotation files
+- You can also specify the path to these files
+- Synteny file is required, Annotation file and email is optional.
+- Output of the command below is <session_id>
+
+	shell> java -jar ws-client-1.0-RC3-jar-with-dependencies.jar sample_synteny.txt sample_annotation.txt email@example.com
+	306120220123200000023417
+
+- Use the <session_id> to access mGSV.
+- In Chrome/Firefox/Safari, copy paste the url below, after replacing the session_id
+
+http://cas-bioinfo.cas.unt.edu/mgsv/summary.php?session_id=<session_id>
+
+3. Running the client service from source
+-----------------------------------------
+
+A. Required (please see section IV of mGSV INSTALL documentation.)
+
+- JDK 1.6+ 
+- Maven
+
+B. Download client source.
+
+	shell> cd /opt/mgsv 
+	shell> wget http://cas-bioinfo.cas.unt.edu/ws/mgsv-ws-client.tar.gz 
+	shell> tar xzf mgsv-ws-client.tar.gz
+	shell> cd mgsv-ws-client
+
+C. Build the sources
+
+	shell> mvn package 
+	shell> cp target/ws-client-1.0-RC3-jar-with-dependencies.jar /opt/mgsv/.
+
+D. Go to above section (2.D) to continue running client Application
+
+4. Developer Documentation
+--------------------------
+
+- We will create a sample Web Service client. 
+- We will re-use the logic code from sample application and go through various steps on creating a Web Service application in Java.
+
+A. Required
+
+- JDK 1.6+ 
+- Maven
+
+B. Create required directories
+
+	shell> cd /opt/mgsv 
+	shell> wget http://cas-bioinfo.cas.unt.edu/ws/mgsv-ws-client.tar.gz 
+	shell> tar xzf mgsv-ws-client.tar.gz
+	shell> mkdir -p /opt/mgsv/project/src/main/java 
+	shell> mkdir -p /opt/mgsv/project/target/
+	shell> cp /opt/mgsv/mgsv-ws-client/pom.xml /opt/mgsv/project/.
+
+C. Execute following command to generate Web Service Helper files
+
+	shell> cd /opt/mgsv/project
+	shell> wsimport -keep -s ./src/main/java -p edu.unt.mgsv.client -d ./target http://cas-bioinfo.cas.unt.edu:8081/MGSVService?wsdl
+	shell> cp /opt/mgsv/mgsv-ws-client/src/java/main/edu/unt/mgsv/uploader/UploadFile.java /opt/mgsv/project/src/java/main/edu/unt/mgsv/uploader/.
+
+- UploadFile.java is the main java file that uses web services from the helper classes to make connection to remote server and execute upload procedures.
+
+D. Execute mvn package to re-compile and produce executable each time UploadFile.java is updated
+
+	shell> mvn package
+
+E. Move the recompiled jar file to /opt/mgsv/ folder.
+
+	shell> cp /opt/mgsv/project/target/ws-client-1.0-RC3-jar-with-dependencies.jar /opt/mgsv/.
+
+

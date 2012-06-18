@@ -82,8 +82,8 @@ Raphael.fn.synteny = function(paper, top_pos, bot_pos, width, set1, set2, id, fi
 			
 			$.each(obj_arr, function(key, value){
 				//value.node.onclick = function () { value.attr("fill", "red")};
-				value.mouseover(function (e) { value.attr('opacity', 1)} );
-				value.mouseout(function (e) { value.attr('opacity', 0.5)} );
+				value.mouseover(function (e) { value.attr('opacity', 1).toFront() } );
+				value.mouseout(function (e) { value.attr('opacity', 0.5) } );
 				value.mousedown(function (e) {
 					var bbox = value.getBBox();
 					$('#coord').css('display', 'block').html(obj_html[key]);

@@ -9,6 +9,7 @@
 <p><span style="color:#800080;">Column 1: ID</span><br>
 	- This where the ID is entered and must correspond to the ID provided in Column 1 or Column 4 in the Synteny file.<br>
 	- It must be alphanumeric and can have either underscores or spaces, but it does not support the use of tabs.<br>
+	- This field is limited to 255 characters.<br>
 	Examples of acceptable formats: Org_A, Chromosome 3, HS19
 </p>
 
@@ -35,7 +36,8 @@
 	- This is where the name of the annotated feature is entered.<br>
 	- It can be alphanumeric.<br>
 	- If not applicable, provide a period, (.).<br>
-	Examples of acceptable formats: PAU_0022, 123.09
+	- The name can be an HTML link. When the user clicks on that feature in the synteny browser, it will open the link in another tab.<br>
+	Examples of acceptable formats: PAU_0022, 123.09, &lt;a href="http://www.ncbi.nlm.nih.gov/gene/945006"&gt;lacZ&lt;/a&gt;
 </p>
 
 <p><span style="color:#800080;">Column 6: Value</span><br>

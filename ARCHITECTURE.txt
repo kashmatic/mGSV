@@ -37,10 +37,10 @@ Step 3:
 | Field      | Type                | Null | Key | Default | Extra          |
 +------------+---------------------+------+-----+---------+----------------+
 | id         | int(10)             | NO   | PRI | NULL    | auto_increment |
-| org1       | varchar(50)         | NO   |     | NULL    |                |
+| org1       | varchar(255)        | NO   |     | NULL    |                |
 | org1_start | int(10) unsigned    | NO   | MUL | NULL    |                |
 | org1_end   | bigint(20) unsigned | NO   | MUL | NULL    |                |
-| org2       | varchar(50)         | NO   |     | NULL    |                |
+| org2       | varchar(255)        | NO   |     | NULL    |                |
 | org2_start | int(10) unsigned    | NO   | MUL | NULL    |                |
 | org2_end   | bigint(20) unsigned | NO   | MUL | NULL    |                |
 | blocks     | tinyint(1)          | NO   |     | 1       |                |
@@ -61,7 +61,7 @@ Step 4:
 | start         | int(20) unsigned    | NO   | MUL | NULL    |                |
 | end           | bigint(20) unsigned | NO   | MUL | NULL    |                |
 | strand        | varchar(1)          | YES  |     | NULL    |                |
-| feature_name  | varchar(100)        | YES  |     | NULL    |                |
+| feature_name  | text                | YES  |     | NULL    |                |
 | feature_value | double              | YES  |     | NULL    |                |
 | track_name    | varchar(100)        | NO   |     | NULL    |                |
 | track_shape   | varchar(100)        | NO   |     | NULL    |                |

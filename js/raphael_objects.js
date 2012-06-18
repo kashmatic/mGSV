@@ -96,8 +96,8 @@ Raphael.fn.synteny = function(paper, height, width, set1, set2, id, filter, syni
 			
 			$.each(obj_arr, function(key, value){
 				//value.node.onclick = function () { value.attr("fill", "red")};
-				value.mouseover(function (e) { value.attr('opacity', 1)} );
-				value.mouseout(function (e) { value.attr('opacity', 0.5)} );
+				value.mouseover(function (e) { value.attr('opacity', 1).toFront() } );
+				value.mouseout(function (e) { value.attr('opacity', 0.5) } );
 				value.mousedown(function (e) {
 					var bbox = value.getBBox();
 					$('#coord').css('display', 'block').html(obj_html[key]);
@@ -151,6 +151,7 @@ Raphael.fn.geneTrack = function(paper, height, width, start, end, org, ann, shap
 			$.each(data, function(key, value){
 				var item = new Array;
 				var name = new Array;
+				var link = new Array;
 				var color;
 				if(setColor != ''){ color = setColor }
 				//console.log(value);
@@ -178,13 +179,15 @@ Raphael.fn.geneTrack = function(paper, height, width, start, end, org, ann, shap
 							i = paper.dottedLine(parseFloat(arr[0]), parseFloat(arr[2]), parseFloat(arr[1]), parseFloat(arr[2]), arrowHeight, color);
 							n = paper.text(parseFloat(arr[0]), parseFloat(arr[2]) - 15, arr[6]).attr({'font-family': 'Monospace', 'text-anchor': 'start', fill: color}).hide();
 							item.push(i);
-							name.push(n);				
+							name.push(n);		
+							link.push(arr[6]);		
 							break;
 						case 'ellipse':
 							i = paper.drawEllipse(parseFloat(arr[0]), parseFloat(arr[2]), parseFloat(arr[1]), parseFloat(arr[2]), arrowHeight, color);
 							n = paper.text(parseFloat(arr[0]), parseFloat(arr[2]) - 15, arr[6]).attr({'font-family': 'Monospace', 'text-anchor': 'start', fill: color}).hide();
 							item.push(i);
-							name.push(n);				
+							name.push(n);
+							link.push(arr[6]);				
 							break;
 						case 'arrow':
 							if(arr[3] == '+'){
@@ -193,6 +196,7 @@ Raphael.fn.geneTrack = function(paper, height, width, start, end, org, ann, shap
 								n = paper.text(parseFloat(arr[0]), parseFloat(arr[2]) - 15, arr[6]).attr({'font-family': 'Monospace', 'text-anchor': 'start', fill: color}).hide();
 								item.push(i);
 								name.push(n);
+								link.push(arr[6]);
 							} 
 							else {
 								//* draw left sided arrow
@@ -200,6 +204,7 @@ Raphael.fn.geneTrack = function(paper, height, width, start, end, org, ann, shap
 								n = paper.text(parseFloat(arr[0]), parseFloat(arr[2]) - 15, arr[6]).attr({'font-family': 'Monospace', 'text-anchor': 'start', fill: color}).hide();
 								item.push(i);
 								name.push(n);
+								link.push(arr[6]);
 							}
 							break;
 						case 'christmasarrow':
@@ -208,25 +213,49 @@ Raphael.fn.geneTrack = function(paper, height, width, start, end, org, ann, shap
 								n = paper.text(parseFloat(arr[0]), parseFloat(arr[2]) - 15, arr[6]).attr({'font-family': 'Monospace', 'text-anchor': 'start', fill: color}).hide();
 								item.push(i);
 								name.push(n);
+								link.push(arr[6]);
 							}
 							else {
 								i = paper.christmasLeftArrow(parseFloat(arr[0]), parseFloat(arr[2]), parseFloat(arr[1]), parseFloat(arr[2]), arrowHeight, color);
 								n = paper.text(parseFloat(arr[0]), parseFloat(arr[2]) - 15, arr[6]).attr({'font-family': 'Monospace', 'text-anchor': 'start', fill: color}).hide();
 								item.push(i);
 								name.push(n);
+								link.push(arr[6]);
 							}
 							break;
 						case 'box':
 							i = paper.box(parseFloat(arr[0]), parseFloat(arr[2]), parseFloat(arr[1]), parseFloat(arr[2]), arrowHeight, color);
 							n = paper.text(parseFloat(arr[0]), parseFloat(arr[2]) - 15, arr[6]).attr({'font-family': 'Monospace', 'text-anchor': 'start', fill: color}).hide();
 							item.push(i);
-							name.push(n);							
+							name.push(n);				
+							link.push(arr[6]);			
 							break;
 					} // switch	
 				} // else
 				$.each(item, function(k, v){
-					v.mouseover(function (e) { name[k].show() });
-					v.mouseout(function (e) { name[k].hide() });
+					console.log(link[k]);
+					if(link[k].match(/^<a href=/)){
+						re = /<a href="(.*)">(.*)<\/a>/;
+						result = re.exec(link[k]);
+						v.click(function(){
+							window.open(result[1]);
+						});
+						name[k].attr({text: result[2]});
+						v.hover(
+							function(){
+								this.g = this.glow({color: "red"});
+								name[k].show();
+							},
+							function(){
+								this.g.remove();
+								name[k].hide();
+							}
+						);
+					}
+					else {
+						v.mouseover(function (e) { name[k].show() });
+						v.mouseout(function (e) { name[k].hide() });
+					}
 				});
 				//paper.text(width/2,height - 30, ann + " oft " + org).attr({'font-family': 'Monospace', 'fill': '#4682B4', 'font-size': 12});
 			});

@@ -46,6 +46,26 @@ SELECT * FROM ".$session_id."_synteny WHERE
 		OR
 		( org2_start >= $arr_set2[0] AND org2_end <= $arr_set2[1] )
 	)
+	OR
+	(
+		( org1_start >= $arr_set2[0] AND org1_end <= $arr_set2[1] )
+		OR
+		( org1_start >= $arr_set2[0] AND org1_start <= $arr_set2[1] )
+		OR
+		( org1_end >= $arr_set2[0] AND org1_end <= $arr_set2[1] )
+		OR
+		( org1_start >= $arr_set2[0] AND org1_end <= $arr_set2[1] )
+	)
+	OR
+	(
+		( org2_start >= $arr_set1[0] AND org2_end <= $arr_set1[1] )
+		OR
+		( org2_start >= $arr_set1[0] AND org2_start <= $arr_set1[1] )
+		OR
+		( org2_end >= $arr_set1[0] AND org2_end <= $arr_set1[1] )
+		OR
+		( org2_start >= $arr_set1[0] AND org2_end <= $arr_set1[1] )
+	)
 )
 AND
 (
@@ -57,18 +77,31 @@ AND
 
 #echo $query, "<br>";
 # SELECT * FROM 304431420120600000016092_synteny WHERE ( org1_start >= 2496 AND org1_end <= 10000 AND org2_start >= 1 AND org2_end <= 98370 ) AND ( (org1 like 'Organism_A' AND org2 like 'Organism_B') OR (org1 like 'Organism_B' AND org2 like 'Organism_A') ) 
+ $color_row = '';
 
 if($filter != ''){
 	$set = explode("@@@", $filter);
-	#echo $set[0],"<br>";
+	#echo sizeof($set),"<br>";
 	for($i = 0; $i < sizeof($set); $i++){
 		#echo $set[$i],"<br>";
-		$query .= " AND ";
-		$each = explode("@@", $set[$i]);
-		$query .= $each[0] . ' ' . $each[1]. ' ' . $each[2]; 
+		if( $set[$i] != 'color'){
+			$query .= " AND ";
+			$each = explode("@@", $set[$i]);
+			$query .= $each[0] . ' ' . $each[1]. ' ' . $each[2]; 
+		}
+		else {
+			$color_query = "
+			SELECT SYNcolor FROM ".$session_id."_synteny WHERE
+			(org1 like '$arr_id[0]' AND org2 like '$arr_id[1]') OR
+			(org1 like '$arr_id[1]' AND org2 like '$arr_id[0]') limit 0,1";
+		
+			#echo $color_query, "<br>------------------------------------------------------------<br>";
+			$color_result = mysql_query($color_query);
+			$color_row = mysql_fetch_assoc($color_result);
+		}
 	}
 }
-#echo "$query<br>";
+#echo "$query<br>------------------------------------------------------------<br>";
 
 $result = mysql_query($query);
 
@@ -98,8 +131,11 @@ while($row = mysql_fetch_assoc($result)){
 	} else {
 		$html .= $row['org2'] .": <br>from ". $row['org2_start']. ' to ' .$row['org2_end'];
 	}
-	$color = getRandomColorHex();
-	$set = (string) $tl . "_" . (string) $tr . "_" . (string) $br . "_" . (string) $bl . "_" . $row['SYNcolor'];
+	if($color_row == ''){
+		$set = (string) $tl . "_" . (string) $tr . "_" . (string) $br . "_" . (string) $bl . "_" . $row['SYNcolor'];
+	} else {
+		$set = (string) $tl . "_" . (string) $tr . "_" . (string) $br . "_" . (string) $bl . "_" . $color_row['SYNcolor'];
+	}
 	array_push($syn_array['pos'], $set);
 	array_push($syn_array['html'], "Coordinates: <br>$html");
 }

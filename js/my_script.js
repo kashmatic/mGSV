@@ -102,17 +102,21 @@ function controlSynteny(syn){
 	//var html = '<p>Synteny between<br>' + order_array[arr[0]]['id'] + ' &<br>' + order_array[arr[1]]['id'] + '<br>\
 	var html = '<p>Filter options<br>\
 </script>\
-<select id="' + syn + '_syn" style="background-color: white; width: 100px;"></select>\
-<select id="' + syn + '_con" style="background-color: white; width: 50px;">\
+<select id="' + syn + '_syn" style="background-color: white; width: 100px;" title="Column name"></select>\
+<select id="' + syn + '_con" style="background-color: white; width: 50px;" title="Operator">\
 <option>>=</option>\
 <option>==</option>\
 <option><=</option>\
 </select>\
 <input style="width:100px;" type="text" id=' + syn + '_input value="" style="width: 150px;">\
-<img src="img/refresh.png" onclick="refreshsyn(\''+ syn +'\')" align="middle">\
+ <img src="img/refresh.png" onclick="refreshsyn(\''+ syn +'\')" align="top" title="Execute filter" style="width: 25px">\
+ <img src="img/XButton.png" onclick="remove_filter(\''+ syn +'\')" align="top" id="img_refresh" title="Reset filter parameters." style="width: 25px">\
 <input type=hidden id="' + syn + '_hide" value=""/><br>\
-<span id="' + syn + '_popup_span"></span>\
+Colors:\
+<span id="' + syn + '_color_on" style="background-color:#4682B4; padding: 1px 5px 1px 5px; font-size:12px; cursor: pointer" onclick="colors_on(this.id)" title="Show multiple colors">on</span>\
+ / <span id="' + syn + '_color_off" style="padding: 2px 5px 2px 5px; font-size:12px; cursor: pointer" onclick="colors_on(this.id)" title="Default color">off</span>\
 </p>';
+	$("#img_refresh").tooltip();
 	getSyntenyOptions(syn);
 	return html;
 }
@@ -120,16 +124,16 @@ function controlSynteny(syn){
 function controlItems(id){
 	//var html = '<p>' + order_array[id]['id'] + '<br/>\
 	var html = '<p>\
-<img src="img/zoomin.png" onclick="zoomin(' + id + ')" align="top">\
-<img src="img/zoomout.png" onclick="zoomout(' + id + ')" align="top">\
-<img src="img/left.png" onclick="moveleft(' + id + ')" align="top">\
-<img src="img/right.png" onclick="moveright(' + id + ')" align="top"> \
-<img class="entire_rounded" src="img/entire.png" onclick="entire(' + id + ')" style="height:25px;width:40px; border: 2px solid #0d6dcd" align="top"> \
-<input style="width:150px" type="text" id=' + id + '_input name="range" value='+ order_array[id]['range'] + '>\
-<img src="img/refresh.png" onclick="refresh(' + id + ')" align="top" style="width:25px"><br>\
+<img src="img/zoomin.png" onclick="zoomin(' + id + ')" align="top" title="Zoom in">\
+<img src="img/zoomout.png" onclick="zoomout(' + id + ')" align="top" title="Zoom out">\
+<img src="img/left.png" onclick="moveleft(' + id + ')" align="top" title="Move left">\
+<img src="img/right.png" onclick="moveright(' + id + ')" align="top" title="Move right"> \
+<img class="entire_rounded" src="img/entire.png" onclick="entire(' + id + ')" style="height:25px;width:40px; border: 2px solid #0d6dcd" align="top" title="View entire region"> \
+<input style="width:150px" type="text" id=' + id + '_input name="range" value='+ order_array[id]['range'] + ' title="Input coordinates">\
+<img src="img/refresh.png" onclick="refresh(' + id + ')" align="top" style="width:25px" title="Zoom into set coordinates"><br>\
 <div id="' + id + '_popup" class="pop">\
-<select id="' + id + '_ann" onchange="selectAnn(' + id + ')" class="genome_select"></select>\
-<select id="' + id + '_shape" onchange="select(' + id + ')" class="genome_select">\
+<select id="' + id + '_ann" onchange="selectAnn(' + id + ')" class="genome_select" title="Track names"></select>\
+<select id="' + id + '_shape" onchange="select(' + id + ')" class="genome_select" title="Track shape">\
 	<option disabled value="" selected>Shape</option>\
 	<option>arrow</option>\
 	<option>box</option>\
@@ -137,7 +141,7 @@ function controlItems(id){
 	<option>dashline</option>\
 	<option>ellipse</option>\
 </select>\
-<select id="' + id + '_color" onchange="select(' + id + ')" class="genome_select">\
+<select id="' + id + '_color" onchange="select(' + id + ')" class="genome_select" title="Track color">\
 	<option disabled value="" selected>Color</option>\
 	<option>pink</option>\
 	<option>red</option>\
@@ -353,7 +357,7 @@ function give_graph_option(){
 		method: 'GET',
 		//* If success
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 			getHref = $('div#button_graph > a').attr('href');
 			$('div#button_graph > a').attr({'href': getHref + data + '&graph=1'});
 			$('div#button_graph').css({'display': 'block'});
@@ -391,6 +395,7 @@ function syntenyTrack(synid, filter){
 	// Initialize the Raphael
 	first =  Raphael(document.getElementById(synid), "100%", "100%");
 	// Draw the synteny
+	//console.log(first, height, width, arr['top'], arr['bot'], arr['id'], filter, synid, session_id);
 	first.synteny(first, height, width, arr['top'], arr['bot'], arr['id'], filter, synid, session_id);
 }
 
@@ -448,7 +453,7 @@ function setSelect(){
 	// Clear all the select menus
 	$("#selectlist").empty();
 	// initialize a select item
-	var select_template = $("<select onchange=getorder(this) class='genome_order'></select>");
+	var select_template = $("<select onchange=getorder(this) class='genome_order' title='Change genome order, Insert or Delete'></select>");
 	// Iterate over the order to create select menus
 	$.each(order_array, function(key, value){
 		var select; // empty variable
@@ -548,10 +553,11 @@ function refresh(id){
 	//console.log(input, id);
 	if(validate_text(input)){
 		input = input.replace(/\s/g, "");
-		var arr = input.split("_")
+		var arr = input.split("_");
 		arr = validate_values(arr, id);
 		if(booleanCheck(id, arr[0] + "_" + arr[1])){
 			order_array[id]['range'] = arr[0] + "_" + arr[1];
+			console.log(order_array[id]['range']);
 			changeSyntenyAnnotation(id);
 		}
 		//pageDisplay();
@@ -570,14 +576,12 @@ function validate_values(arr, id){
 	org = order_array[id]['id'];
 	full = getFromTemplate(org);
 	check = full['range'].split('_');
-	//console.log(arr);
-	if(arr[0] < check[0]){
+	if( parseInt(arr[0]) < parseInt(check[0])){
 		arr[0] = check[0];
 	}
-	if(arr[1] > check[1]){
+	if(parseInt(arr[1]) > parseInt(check[1])){
 		arr[1] = check[1];
 	}
-	//console.log(arr);
 	return arr;
 }
 
@@ -617,15 +621,19 @@ function changeSyntenyAnnotation(id){
 	last = order_array.length;
 	if(id == 0){
 		next = id + 1;
-		syntenyTrack(id + "__SEP__" + next + "__SYNTENY", '');
+		//syntenyTrack(id + "__SEP__" + next + "__SYNTENY", '');
+		check_color(id + "__SEP__" + next);
 	}
 	else if((id > 0) && (id < last)){
 		next = id + 1;
 		prev = id - 1;
 		//console.log(prev, id, next, last);
-		syntenyTrack( prev + "__SEP__" + id + "__SYNTENY", '');
+		//syntenyTrack( prev + "__SEP__" + id + "__SYNTENY", '');
+		check_color(prev + "__SEP__" + id);
+		
 		if(next < last){
-			syntenyTrack( id + "__SEP__" + next + "__SYNTENY", '');
+			//syntenyTrack( id + "__SEP__" + next + "__SYNTENY", '');
+			check_color(id + "__SEP__" + next);
 		}
 	}
 	/* 
@@ -634,6 +642,18 @@ function changeSyntenyAnnotation(id){
 		syntenyTrack( prev + "__SEP__" + id + "__SYNTENY", '');
 	}
 	*/
+}
+
+function check_color(syn){
+	bool = is_color_on(syn);
+	console.log(bool);
+	if(bool == true){
+		id = syn + '_color_on';
+		colors_on(id);
+	} else {
+		id = syn + '_color_off';
+		colors_on(id);
+	}
 }
 
 function zoomout(id){
@@ -775,6 +795,12 @@ function refreshsyn(syn){
 	filterlist(syn);
 }
 
+function remove_filter(syn){
+	$('#'+syn+'_hide').val('');
+	$('#'+syn+'_input').val('');
+	filterlist(syn);
+}
+
 function filterlist(syn){
 	var y = $('#'+syn+'_hide').val();
 	/*
@@ -790,9 +816,10 @@ function filterlist(syn){
 		$('#'+ syn + '_popup_span').empty();
 	}
 	*/
-	syn += "__SYNTENY";
-	//console.log("filterlist y - " + y);
-	syntenyTrack(syn, y);
+	//syn += "__SYNTENY";
+	//syntenyTrack(syn, y);
+	id = syn + '_color_on';
+	colors_on(id);
 }
 
 function remove(syn, term){
@@ -811,4 +838,71 @@ function remove(syn, term){
 		$('#'+syn+'_hide').val(arr.join('@@@'));
 	}
 	filterlist(syn);
+}
+
+function colors_on(id){
+	bc = $('#' + id).css('background-color');
+	syn = id.replace(/_color_.*/, '');
+	var y = $('#'+syn+'_hide').val();
+	//console.log(y, bc);
+	if (y == 'undefined'){
+		y = '';
+	} 
+	syn += "__SYNTENY";
+	$('#' + id).css({'background-color': 'rgb(70, 130, 180)'});
+	
+	if(id.match(/on$/)){
+		nid = id.replace('_on', '_off');
+		$('#' + nid).css({'background-color': 'transparent'});
+		syntenyTrack(syn, y);
+	}
+	else {
+		fid = id.replace('_off', '_on');
+		$('#' + fid).css({'background-color': 'transparent'});
+		if(y == ''){
+			syntenyTrack(syn, 'color');
+		} else {
+			syntenyTrack(syn, y + '@@@color');
+		}
+	}
+}
+
+function colors_on_old(id){
+	bc = $('#' + id).css('background-color');
+	syn = id.replace(/_color_.*/, '');
+	var y = $('#'+syn+'_hide').val();
+	//console.log(y, bc);
+	if (y == 'undefined'){
+		y = '';
+	} 
+	syn += "__SYNTENY";
+	if(bc == 'rgb(70, 130, 180)'){
+		syntenyTrack(syn, y);
+		return true;
+	} else {
+		$('#' + id).css({'background-color': 'rgb(70, 130, 180)'});
+		console.log( $('#' + id).css('background-color'));
+		if(id.match(/on$/)){
+			nid = id.replace('_on', '_off');
+			$('#' + nid).css({'background-color': 'transparent'});
+			syntenyTrack(syn, y);
+		} 
+		else {
+			fid = id.replace('_off', '_on');
+			$('#' + fid).css({'background-color': 'transparent'});
+			if(y == ''){
+				syntenyTrack(syn, 'color');
+			} else {
+				syntenyTrack(syn, y + '@@@color');
+			}
+		}
+	}
+}
+
+function is_color_on(syn){
+	bc = $('#' + syn + '_color_on').css('background-color');
+	if(bc == 'rgb(70, 130, 180)'){
+		return true;
+	}
+	return false;
 }

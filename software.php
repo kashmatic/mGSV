@@ -31,8 +31,13 @@
 			<legend>Software download</legend>
 			<p class="bodypara">
 				<p>
-					The software can be dowloaded here <a href="http://cas-bioinfo.cas.unt.edu/mgsv/mgsv.1.0.tar.gz">mGSV v1.0</a>.<br>
+					The software can be dowloaded here <a href="http://cas-bioinfo.cas.unt.edu/mgsv/mgsv.v2.0.tar.gz">mGSV v2.0</a>.<br>
 					Latest updates are in <a href="https://github.com/kashmatic/mGSV" target="_blank">GitHub Repository</a>
+				</p>
+				<hr>
+				<p>
+					Previous version: <br>
+					<a href="http://cas-bioinfo.cas.unt.edu/mgsv/mgsv.1.0.tar.gz">mGSV v1.0</a>
 				</p>
 			</p>
 		</fieldset>

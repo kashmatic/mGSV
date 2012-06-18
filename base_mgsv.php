@@ -36,15 +36,15 @@
 		<div style="clear:both">
 			<div style="float:left; padding: 10px;">
 				
-				<img src="img/zoomin.png" onclick="all_zoomin(' + id + ')" align="top">
-				<img src="img/zoomout.png" onclick="all_zoomout(' + id + ')" align="top">
-				<img src="img/left.png" onclick="all_moveleft(' + id + ')" align="top">
-				<img src="img/right.png" onclick="all_moveright(' + id + ')" align="top">
-				<img class="entire_rounded" src="img/entire.png" onclick="all_entire(' + id + ')" style="height:25px;width:40px; border: 3px solid #0d6dcd" align="top">
+				<img src="img/zoomin.png" onclick="all_zoomin(' + id + ')" align="top" title="Zoom in (all genomes)">
+				<img src="img/zoomout.png" onclick="all_zoomout(' + id + ')" align="top" title="Zoom out (all genomes)">
+				<img src="img/left.png" onclick="all_moveleft(' + id + ')" align="top" title="Move left (all genomes)">
+				<img src="img/right.png" onclick="all_moveright(' + id + ')" align="top" title="Move right (all genomes)">
+				<img class="entire_rounded" src="img/entire.png" onclick="all_entire(' + id + ')" style="height:25px;width:40px; border: 3px solid #0d6dcd" align="top" title="Entire region (all genomes)">
 			</div>
 			<div style="float:left; padding: 10px;">
 				<span id="selectlist"></span>
-				<img class="entire_rounded" src="img/view.png" onclick="rearrange()" style="height:25px;width:80px; border: 3px solid #0d6dcd" align="top">
+				<img class="entire_rounded" src="img/view.png" onclick="rearrange()" style="height:25px;width:80px; border: 3px solid #0d6dcd" align="top" title="Rearrange the genomes">
 				<span id="select_order_check" style="color:red"></span>
 			</div>
 		</div>

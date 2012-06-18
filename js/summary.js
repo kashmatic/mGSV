@@ -25,7 +25,7 @@ function getOptions(session_id){
 		//* If success
 		success: function(data){
 			arr = data;
-			console.log(arr);
+			//console.log(arr);
 			draw();
 		},
 		//* If error. show the error in console.log
@@ -81,13 +81,13 @@ $(document).ready(function(){
 function draw(){
 	h = $("#canvas").height();
 	w = $("#canvas").width();
-	console.log(h,w);
+	//console.log(h,w);
 	var r =  Raphael(document.getElementById('canvas'), w, h);
 	centerx = w/2;
 	centery = h/2;
 	var array = startEndAngle(arr);
 	for(var key in array){
-		console.log(key);
+		//console.log(key);
 		r.curve(array[key]['start'], array[key]['end'], key);
 	}
 	orgs = getkeys();
@@ -95,7 +95,7 @@ function draw(){
 	$('#synInfo').append('<p></p>');
 	for(var i = 0; i < orgs.length; i++){
 		for(var j = i + 1; j < orgs.length; j++){
-			console.log(orgs[i], orgs[j]);
+			//console.log(orgs[i], orgs[j]);
 			r.syn(r, orgs[i], array[orgs[i]]['count'], orgs[j], array[orgs[j]]['count'], randomColor());
 		}
 	}
@@ -119,7 +119,7 @@ function generateOrder(){
 		//* If success
 		success: function(data){
 			defaultOrder(data);
-			console.log(data);
+			//console.log(data);
 			$('#rotate').css({'display': 'none'});
 			$('div.order').css({'display': 'block'});
 		},
@@ -150,9 +150,9 @@ function defaultOrder(value){
 }
 
 function randomColor(){
-	var r = Math.floor(Math.random()*256);
- 	var g = Math.floor(Math.random()*256);
- 	var b = Math.floor(Math.random()*256);
+	var r = Math.floor(Math.random()*255) ;
+ 	var g = Math.floor(Math.random()*255) ;
+ 	var b = Math.floor(Math.random()*255) ;
  	color = '#'+intToHex(r)+intToHex(g)+intToHex(b);
  	return color;
 }
@@ -211,6 +211,8 @@ Raphael.fn.curve = function(angle_start, angle_end, key){
 	var yy1 = centery + inner_r * Math.sin(-angle_start * rad);
 	var yy2 = centery + inner_r * Math.sin(-angle_end * rad);
 	
+	//var cc = randomColor();
+	
 	bool = 0;
 	if (angle_end - angle_start > 180)
 		bool = 1;
@@ -219,17 +221,45 @@ Raphael.fn.curve = function(angle_start, angle_end, key){
 	outer_arc = "A" + outer_r + "," + outer_r + ", 0, " + bool + ", 0, "+ x2 + "," + y2;
 	line2 = "L" + xx2 + "," + yy2;
 	inner_arc = "A" + inner_r + "," + inner_r + ", 0, " + bool + ", 1, "+ xx1 + "," + yy1;
-	c = this.path(start + line1 + outer_arc + line2 + inner_arc).attr({fill: '#EEE8AA'});
+	c = this.path(start + line1 + outer_arc + line2 + inner_arc).attr({fill: '#EEE8AA', stroke: 'black'});
+	//c = this.path(start + line1 + outer_arc + line2 + inner_arc).attr({fill: cc, stroke: cc});
 	cur.push(c);
 	ss = c.getTotalLength();
 	dd = c.getPointAtLength(ss/3);
-	//console.log(key);
-	t = this.text(dd.x, dd.y, key);
-	t.attr({"font-size": '16pt', 'font-family': 'Monospace', 'stroke': '#4682B4'});
-	cur.push(t);
+	//console.log(key);	
 	//console.log(dd.x);
+
+	//
+	//var tx1 = centerx + (outer_r ) * Math.cos(-angle_start * rad);
+	//var tx2 = centerx + (outer_r ) * Math.cos(-angle_end * rad);
+	//var ty1 = centery + (outer_r ) * Math.sin(-angle_start * rad);
+	//var ty2 = centery + (outer_r ) * Math.sin(-angle_end * rad);
+	
+	//tstart = "M" + tx1 + "," + ty1;
+	//touter_arc = "A" + (outer_r) + "," + (outer_r) + ", 0, " + bool + ", 0, "+ tx2 + "," + ty2;
+	//this.path(tstart + touter_arc).attr({stroke: cc, 'stroke-width': 3});
+	//console.log(angle_start, angle_end);
+	//var v = angle_end - angle_start;
+	//var w = v/10;
+	//for( var i = angle_start; i < angle_end; i = i + w){
+		//console.log(i, v, w);
+		//var ix1 = centerx + (outer_r) * Math.cos(-i * rad);
+		//var ix2 = centerx + (outer_r + 10) * Math.cos(-i * rad);
+		//var iy1 = centery + (outer_r) * Math.sin(-i * rad);
+		//var iy2 = centery + (outer_r + 10) * Math.sin(-i * rad);
+		//this.path("M" + ix1 + "," + iy1 + "L" + ix2 + "," + iy2).attr({stroke: cc, 'stroke-width': 3});
+		//console.log("M" + ix1 + "," + iy1 + "L" + ix2 + "," + iy2);
+		//this.text(ix2, iy2, 'kashi').transform("r" + rad + "," + centerx + "," + centery);		
+	//}
+
+	
+	t = this.text(dd.x, dd.y, key).toFront();
+	//t.attr({"font-size": '16pt', 'font-family': 'Monospace', 'stroke': '#4682B4'});
+	t.attr({"font-size": '16pt', 'font-family': 'Monospace', 'stroke': 'black'});
+	cur.push(t);
 	return cur;
 }
+
 
 Raphael.fn.syn = function(paper, set1, set1_count, set2, set2_count, color){
 	//* Use ajax to get JSON object
@@ -259,7 +289,7 @@ Raphael.fn.syn = function(paper, set1, set1_count, set2, set2_count, color){
 				syn = value.split('_');
 				data = synteny(syn, total);
 				//console.log(data);
-				p = paper.path(data).attr({fill: color, opacity: 0.3});
+				p = paper.path(data).attr({fill: color, opacity: 0.5});
 				obj_list.push(p);
 			});
 			$.each(obj_list, function(key, value){

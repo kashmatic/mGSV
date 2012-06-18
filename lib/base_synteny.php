@@ -46,6 +46,26 @@ SELECT * FROM ".$session_id."_synteny WHERE
 		OR
 		( org2_start >= $arr_set2[0] AND org2_end <= $arr_set2[1] )
 	)
+	OR
+	(
+		( org1_start >= $arr_set2[0] AND org1_end <= $arr_set2[1] )
+		OR
+		( org1_start >= $arr_set2[0] AND org1_start <= $arr_set2[1] )
+		OR
+		( org1_end >= $arr_set2[0] AND org1_end <= $arr_set2[1] )
+		OR
+		( org1_start >= $arr_set2[0] AND org1_end <= $arr_set2[1] )
+	)
+	OR
+	(
+		( org2_start >= $arr_set1[0] AND org2_end <= $arr_set1[1] )
+		OR
+		( org2_start >= $arr_set1[0] AND org2_start <= $arr_set1[1] )
+		OR
+		( org2_end >= $arr_set1[0] AND org2_end <= $arr_set1[1] )
+		OR
+		( org2_start >= $arr_set1[0] AND org2_end <= $arr_set1[1] )
+	)
 )
 AND
 (

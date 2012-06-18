@@ -29,7 +29,7 @@ mGSV requires a MySQL database to store data. Listed below are steps to create a
 	mysql> CREATE DATABASE mgsv;
 
 3. Create a user 'mgsv_user'
-	mysql> CREATE USER 'mgsvuser'@'localhost' IDENTIFIED BY 'mgsvpass';
+	mysql> CREATE USER 'mgsv_user'@'localhost' IDENTIFIED BY 'mgsvpass';
 
 
 4. Set privileges to 'mgsv_user' to use database 
@@ -54,12 +54,12 @@ If you use different database settings, please refer to the MySQL document for i
 
 
 Section III: Set up the multi-Genome Synteny Viewer
------------------------------------------
+---------------------------------------------------
 
 1. Download the source code from the mGSV website http://cas-bioinfo.cas.unt.edu/mgsv/software.php
 
-2. Unzip the file mgsv.v1.0.tar.gz. This should create a folder called 'mgsv'.
-	shell> tar zxvf mgsv.v1.0.tar.gz
+2. Unzip the file mgsv.v2.1.tar.gz. This should create a folder called 'mgsv'.
+	shell> tar zxvf mgsv.v2.1.tar.gz
 
 3. Move the folder 'mgsv' to DocumentRoot of Apache web server. By default, the DocumentRoot of Apache is /var/www/ (speak to the system administrator to know the exact DocumentRoot).
 	shell> mv mgsv /var/www/.
@@ -86,8 +86,115 @@ The script cleanup.php will be executed at 4:30 AM every morning.
 
 9. When installation completes, you can now open Install/index.php (i.e., http://<YOUR_SERVER_DOMAIN_NAME>/mgsv/Install/), which verifies prerequisites, database setup, and installation. YOUR_SERVER_DOMAIN_NAME refers to the domain name of your server.
 
-Section IV: Additional notes:
 
-1. For troubleshooting, please use the contact details at http://cas-bioinfo.cas.unt.edu/mgsv/mgsvcontact.php
+Section IV: Web Service (optional)
+----------------------------------
+
+1. Web service is an optional component of mGSV. 
+
+The goal of this part of the installation are to:
+- Install Web Service using source or binary files that comes with mGSV distribution.
+- Run or Stop Web Service as a background job
+- Verify following artefacts are available for client or software developers to use the Web Service
+		a. WSDL File (XML Based Specification for web Service)
+			- Needed for developers to create helper classes and know the method signature for web service.
+			- After successful installation and running this file is available at:
+				http://<YOUR_SERVER_DOMAIN_NAME>:8081/MGSVService?wsdl
+
+		b. An url where client can connect to consume the web service
+			- Needed for developers to connect and use the web service.
+			- Needed for client application user to connect and upload synteny data
+			- Available at
+				http://<YOUR_SERVER_DOMAIN_NAME>:8081/MGSVService
+
+		c. A reference documentation that explains the services
+			- Software developement reference guide for client developers.
+			- Explains the service in detail
+			- available at:
+				http://<YOUR_SERVER_DOMAIN_NAME>/ws/client-reference.txt
+
+		All three urls in (a,b,c) can be verified by visiting them using browser.
+			a. XML File
+			b. Small note or a blank screen
+			d. Documentation file
+
+2. Installation from binary.
+
+	A. Required (Java 1.6 or higher)
+		- To check whether you have the required JDK installed execute following command
+	
+			shell> java -version
+	
+		If "No command 'java' found ... ", java is not installed or not configured properly. To install java
+	
+			shell> apt-get install openjdk-6-jdk
+	
+		If java version is less than 1.6, upgrade java using
+
+			shell> apt-get install openjdk-6-jdk
+
+	B. Edit configuration file to specify your mGSV server
+		- Configuration file has the format of key:value and is present in the same directory as ws-server-1.0RC1-jar-with-dependencies.jar
+	
+			shell> cd /var/www/mgsv/ws
+			shell> echo "mgsv_upload_url=http://<YOUR_SERVER_DOMAIN_NAME>/mgsv" > config.properties
+			shell> echo "ws_publish_url=http\://<YOUR_SERVER_DOMAIN_NAME>\:8081/MGSVService" >> config.properties
+
+	C. Run Web Service
+
+		shell> cd /var/www/mgsv/ws
+		shell> java -jar ws-server-1.0RC1-jar-with-dependencies.jar &
+	
+	D. To stop the web service
+		
+			shell> ps aux | grep ws-server-1.0RC1-jar-with-dependencies.jar
+			*Note the process id from the output*
+			shell> kill -9 <process id>
+
+3. Installation from source.
+
+	A. Required.
+	- Java 1.6 or higher
+	- Maven 3.0 or higher
+	
+		shell> mvn --version
+
+		If "No command 'mvn' found ... ", Maven is not installed or not configure properly. To install Maven
+		shell> cd /tmp
+		shell> wget http://apache.mirrors.hoobly.com/maven/binaries/apache-maven-3.0.4-bin.tar.gz
+		shell> tar zxvf apache-maven-3.0.4-bin.tar.gz
+
+	B. Decompress server source
+	
+		shell> cd /var/www/mgsv/ws
+		shell> tar -xzf ws-server-src.tar.gz
+		
+		Note: Structure of the source folder (/var/www/mgsv/ws-server)
+				src/								: Source folder
+				config.properties		: Configuration file
+				pom.xml							: Maven Build Configuration file
+
+			Note: src/edu/unt/mgsv/MGSVService.java is the main java file that contains the Web Service
+			implementation. Code is extensively documented to incoperate changes. The Archetecture guide
+			has further information about inner working of this file.
+
+	C. Compile source using Maven.
+	
+		shell> cd /var/www/mgsv/ws-server
+		shell> /tmp/apache-maven-3.0.4/bin/mvn package
+		
+		* This command downloads required dependencies and creates a executable 
+			binary, a java jar file, (ws-server-1.0RC1-jar-with-dependencies.jar) under folder 'target'. This
+			file is stand alone binary and contains all the necessary libraries. Only requirement to run this
+			binary would be a JDK 1.6+
+			
+	D. Copy binary file and continue from Section IV. 2. A	
+	
+		shell> cp -f /var/www/mgsv/ws/mgsv-ws-server/target/ws-server-1.0RC1-jar-with-dependencies.jar /var/www/mgsv/ws/.
+
+Section V: Additional notes
+---------------------------
+
+1. For troubleshooting, please use the contact details at http://cas-bioinfo.cas.unt.edu/mgsv/contact.php
 2. Refer to the ARCHITECTURE.txt file to understand the architecture of mGSV.
 

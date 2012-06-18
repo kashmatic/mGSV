@@ -23,34 +23,29 @@
 	}
 	.divline {
 		height: 33px;
-		width:1000px;
+		width:1200px;
 	}
 </style>
 <div class="divline">
-	<div style="float:left;">
-	<a href="summary.php?session_id=<? echo $_GET['session_id'] ?>" style="text-decoration: none;">
-		<span class="large button blue round">&larr; Summary</span>
-	</a>
+	<div style="float:left;" title="Go back to Summary page.">
+		<a href="summary.php?session_id=<? echo $_GET['session_id'] ?>" style="text-decoration: none;">
+			<span class="large button blue round">&larr; Summary</span>
+		</a>
 	</div>
 	<div id="info_bar" style="float:left; margin-left:10px;">
 		<span style="padding-top:10px"></span>
 	</div>
-	<div id="button_default" style="float:left; margin-left:10px; display: none;">
-	<a href="mgsv.php?session_id=<? echo $_GET['session_id'] ?>&order=<? echo $order ?>" style="text-decoration: none;">
-		<span class="large button blue round">Pairwise view</span>
-	</a>
+	<div id="button_graph" style="float:left; margin-left:10px; display: none;" title="Improve the order below using Graph theory.">
+		<a href="mgsv.php?session_id=<? echo $_GET['session_id'] ?>&order=" style="text-decoration: none;left: 0px">
+			<span class="large button blue round">Optimize order</span>
+		</a>
 	</div>
 	<!-- <button class="large button blue">Suggested</button> -->
 	<input type=hidden id=graph_value name=graph_value value="<? echo $_GET['graph'] ?>">
 	<input type=hidden id=default_order name=default_order value="<? echo $_GET['order'] ?>">
-	<div id="button_brute" style="float:left; margin-left:10px; display: none;">
-	<a href="base_mgsv.php?session_id=<? echo $_GET['session_id'] ?>&order=<? echo $order ?>" style="text-decoration: none;left: 0px">
-		<span class="large button blue round">Multiple view</span>
-	</a>
-	</div>
-	<div id="button_graph" style="float:left; margin-left:10px; display: none;">
-	<a href="mgsv.php?session_id=<? echo $_GET['session_id'] ?>&order=" style="text-decoration: none;left: 0px">
-		<span class="large button blue round">Optimize order</span>
-	</a>
+	<div id="button_opti" style="float:left; margin-left:10px; display: none;" title="Improve the order by using Insertion">
+		<a href="base_mgsv.php?session_id=<? echo $_GET['session_id'] ?>&order=" style="text-decoration: none;left: 0px">
+			<span class="large button blue round">Optimize order</span>
+		</a>
 	</div>
 </div>

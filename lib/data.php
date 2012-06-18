@@ -62,27 +62,12 @@ else if ($data == 'size'){
 	}
 }
 else if ($data == 'order'){
-	$query = "select distinct org1,org2 from ".$session_id."_synteny union select distinct org1,org2 from ".$session_id."_synteny ";
+	$query = "select distinct org1 from ".$session_id."_synteny union select distinct org2 from ".$session_id."_synteny ";
 	//echo $query,"<br>";
 	$result = mysql_query($query);
 	$default = array();
-	$assarr = array();
 	while($row = mysql_fetch_assoc($result)){
-		if( ! in_array($row['org1'], $default)){
-			array_push($default, $row['org1']);
-			$assarr[sizeof($assarr)] = array();
-		}
-		if( ! in_array($row['org2'], $default)){
-			array_push($default, $row['org2']);
-			$assarr[sizeof($assarr)] = array();
-		}
-		$assarr[array_search($row['org1'], $default)][array_search($row['org2'], $default)] = 1;
-		$assarr[array_search($row['org2'], $default)][array_search($row['org1'], $default)] = 1;
-		#echo array_search($row['org1'], $default) . "][ ". array_search($row['org2'], $default) . '<br>';
-		$assarr[array_search($row['org1'], $default)][array_search($row['org1'], $default)] = 0;		
-		#echo array_search($row['org1'], $default) . "][ ". array_search($row['org1'], $default) . '<br>';
-		$assarr[array_search($row['org2'], $default)][array_search($row['org2'], $default)] = 0;
-		#echo array_search($row['org2'], $default) . "][ ". array_search($row['org2'], $default) . '<br>';
+		array_push($default, $row['org1']);
 	}
 	$array = join('__ORDER__', $default);
 }
@@ -101,8 +86,15 @@ else if ($data == 'sorder'){
 			array_push($default, $row['org2']);
 			$assarr[sizeof($assarr)] = array();
 		}
-		$assarr[array_search($row['org1'], $default)][array_search($row['org2'], $default)] = 1;
-		$assarr[array_search($row['org2'], $default)][array_search($row['org1'], $default)] = 1;
+		$len_query = "select sum(org1_end) - sum(org1_start) + sum(org2_end) - sum(org1_start) as sum from ".$session_id."_synteny where (org1 like '".$row['org1']."' and org2 like '".$row['org2']."') OR (org1 like '".$row['org2']."' and org2 like '".$row['org1']."')";
+		$q_result = mysql_query($len_query);
+		$q_row = mysql_fetch_assoc($q_result);
+		#echo $len_query,"<br>";
+		#echo $q_row['sum'],"<br>";
+		$assarr[array_search($row['org1'], $default)][array_search($row['org2'], $default)] = $q_row['sum'];
+		#$assarr[array_search($row['org1'], $default)][array_search($row['org2'], $default)] = 1;
+		$assarr[array_search($row['org2'], $default)][array_search($row['org1'], $default)] = $q_row['sum'];
+		#$assarr[array_search($row['org2'], $default)][array_search($row['org1'], $default)] = 1;
 		#echo array_search($row['org1'], $default) . "][ ". array_search($row['org2'], $default) . '<br>';
 		$assarr[array_search($row['org1'], $default)][array_search($row['org1'], $default)] = 0;		
 		#echo array_search($row['org1'], $default) . "][ ". array_search($row['org1'], $default) . '<br>';

@@ -6,7 +6,6 @@ $(document).ready(function(){
 	//console.log(session_id);
 	// Get the array order to be displayed. 
 	getOrderArray(session_id);
-	$('div#button_default').css({'display': 'block'});
 	$('div#info_bar > span').html('Organisms are arranged as provided in the uploaded synteny file. To avoid overcrowding, try alternate view.');
 });
 
@@ -79,6 +78,7 @@ function pageDisplay(){
 	createDivs();
 	drawImage();
 	setSelect();
+	graph_or_default();
 }
 
 function getNumber(org){
@@ -152,14 +152,14 @@ function createDivs(){
 function controlItems(id){
 	//var html = '<p>' + order_array[id]['id'] + '<br/>\
 	var html = '<p>\
-<img src="img/zoomin.png" onclick="zoomin(' + id + ')" align="top">\
-<img src="img/zoomout.png" onclick="zoomout(' + id + ')" align="top">\
-<img src="img/left.png" onclick="moveleft(' + id + ')" align="top">\
-<img src="img/right.png" onclick="moveright(' + id + ')" align="top"> \
-<img class="entire_rounded" src="img/entire.png" onclick="entire(' + id + ')" style="height:25px;width:40px; border: 2px solid #0d6dcd" align="top"> \
+<img src="img/zoomin.png" onclick="zoomin(' + id + ')" align="top" title="Zoom in">\
+<img src="img/zoomout.png" onclick="zoomout(' + id + ')" align="top" title="Zoom out">\
+<img src="img/left.png" onclick="moveleft(' + id + ')" align="top" title="Move left">\
+<img src="img/right.png" onclick="moveright(' + id + ')" align="top" title="Move right"> \
+<img class="entire_rounded" src="img/entire.png" onclick="entire(' + id + ')" style="height:25px;width:40px; border: 2px solid #0d6dcd" align="top" title="Entire genome"> \
 <br> \
-<input style="width:150px" type="text" id=' + id + '_input name="range" value='+ order_array[id]['range'] + '>\
-<img src="img/refresh.png" onclick="refresh(' + id + ')" align="top" style="width:25px"><br>\
+<input style="width:150px" type="text" id=' + id + '_input name="range" value='+ order_array[id]['range'] + ' title="Provide coordinates">\
+<img src="img/refresh.png" onclick="refresh(' + id + ')" align="top" style="width:25px" title="Set the coordinates"><br>\
 </p>\
 ';
 	return html;
@@ -168,14 +168,15 @@ function controlItems(id){
 function controlSynteny(){
 	var html = '<p>Filter options<br>\
 </script>\
-<select id="_syn" style="background-color: white; width: 100px;"></select>\
-<select id="_con" style="background-color: white; width: 50px;">\
+<select id="_syn" style="background-color: white; width: 100px;" title="Column names"></select>\
+<select id="_con" style="background-color: white; width: 50px;" title="Operator">\
 <option>>=</option>\
 <option>==</option>\
 <option><=</option>\
 </select><br>\
-<input style="width:100px;" type="text" id="_input" value="" style="width: 150px;">\
-<img src="img/refresh.png" onclick="refreshsyn()" align="middle">\
+<input style="width:100px;" type="text" id="_input" value="" style="width: 150px;" title="Provide coordinates">\
+ <img src="img/refresh.png" onclick="refreshsyn()" align="top" title="Set filter" style="width: 25px">\
+ <img src="img/XButton.png" onclick="reset_filter()" align="top" title="Remove filter" style="width: 25px">\
 </p>';
 	getSyntenyOptions();
 	return html;
@@ -271,7 +272,7 @@ function syntenyTrack(paper, synid, filter){
 	pair = synid.split("__SEP__");
 	orgpair = arr['id'].split("__SEP__");
 	//html = '<p class="assocShow" id="' + pair[0] + '__SEP__' + pair[1] + '" onclick="getChecked(\'' + pair[0] + '__SEP__' + pair[1] + '\')">' + orgpair[0] + ' <span style="color:red">vs.</span> ' + orgpair[1] + '</p>';
-	html = '<span class="assocShow" id="' + pair[0] + '__SEP__' + pair[1] + '" onclick="getChecked(\'' + pair[0] + '__SEP__' + pair[1] + '\')">' + orgpair[0] + ' vs. ' + orgpair[1] + '</span> ';
+	html = '<span class="assocShow" id="' + pair[0] + '__SEP__' + pair[1] + '" onclick="getChecked(\'' + pair[0] + '__SEP__' + pair[1] + '\')" title="Click to Display/Hide Synteny pairs">' + orgpair[0] + ' vs. ' + orgpair[1] + '</span> ';
 	if(orgpair[0] == orgpair[1]){
 		return '';
 	} else {
@@ -376,7 +377,7 @@ function setSelect(){
 	// Iterate over the order to create select menus
 	$.each(order_array, function(key, value){
 		var select; // empty variable
-		select = $("<select onchange=getorder(this) class='genome_order'></select>");
+		select = $("<select onchange=getorder(this) class='genome_order' title='Re-arrange the order by Select/Insert/Delete'></select>");
 		//select = $("<select class='genome_order'></select>");
 		select = opt(select); // Fill the select with options
 		$(select).val(value['id']); // set the selected item
@@ -531,7 +532,11 @@ function filterlist(syn){
 	syntenyTrack(syn, y);
 }
 
-
+function reset_filter(){
+	$('#'+syn+'_hide').val('');
+	$('#_input').val('');
+	drawImage('');
+}
 
 
 function zoomin(id){
@@ -676,3 +681,44 @@ function validate_text(string){
 	return bool;
 }
 
+function graph_or_default(){
+	graph = $("input#graph_value").val();
+	if(graph == 1){
+		$('div#info_bar > span').html('Organisms are arranged in optimized order.');
+	}
+	else{
+		$('div#info_bar > span').html('Organisms are arranged as provided in the uploaded synteny file.');
+		getOptimal();
+	}
+}
+
+function getOptimal(){
+		//* Use ajax to get JSON object
+	$.ajax({
+		//* file
+		url: 'lib/base_data.php',
+		data: { 
+			org: '', 
+			data: 'sorder',
+			session_id: session_id
+		},
+		//* datatype returned
+		dataType: 'json',
+		//* request method
+		method: 'GET',
+		//* If success
+		success: function(data){
+			console.log(data);
+			getHref = $('div#button_opti > a').attr('href');
+			$('div#button_opti > a').attr({'href': getHref + data + '&graph=1'});
+			$('div#button_opti').css({'display': 'block'});
+			$('div#info_bar > span').html('Organisms are arranged as provided in the uploaded synteny file. Click "Optimize order" to rearrange the organisms.');
+		},
+		//* If error. show the error in console.log
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log(textStatus+" - "+errorThrown);
+			console.log(XMLHttpRequest.responseText);
+		}
+	});
+	//console.log(arr);
+}

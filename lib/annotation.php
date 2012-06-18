@@ -19,11 +19,19 @@ $base = $height - 40;
 include('database.php');
 
 $query = "
-SELECT * FROM ".$session_id."_annotation WHERE 
-start >= $start AND 
-end <= $end AND 
-org_id like '$org' AND
-track_name like '$ann' 
+SELECT * FROM ".$session_id."_annotation 
+WHERE 
+(
+		( start >= $start AND end <= $end )
+		OR
+		( start >= $start AND start <= $end )
+		OR
+		( end >= $start AND end <= $end )
+		OR
+		( start >= $start AND end <= $end )
+)
+AND org_id like '$org' 
+AND track_name like '$ann' 
 ";
 #echo "$query<br>";
 
