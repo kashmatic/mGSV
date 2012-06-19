@@ -120,7 +120,7 @@ The goal of this part of the installation are to:
 
 2. Installation from binary.
 
-	A. Required (Java 1.6 or higher)
+	2.A. Required (Java 1.6 or higher)
 		- To check whether you have the required JDK installed execute following command
 	
 			shell> java -version
@@ -133,19 +133,19 @@ The goal of this part of the installation are to:
 
 			shell> apt-get install openjdk-6-jdk
 
-	B. Edit configuration file to specify your mGSV server
+	2.B. Edit configuration file to specify your mGSV server
 		- Configuration file has the format of key:value and is present in the same directory as ws-server-1.0RC1-jar-with-dependencies.jar
 	
 			shell> cd /var/www/mgsv/ws
 			shell> echo "mgsv_upload_url=http://<YOUR_SERVER_DOMAIN_NAME>/mgsv" > config.properties
 			shell> echo "ws_publish_url=http\://<YOUR_SERVER_DOMAIN_NAME>\:8081/MGSVService" >> config.properties
 
-	C. Run Web Service
+	2.C. Run Web Service
 
 		shell> cd /var/www/mgsv/ws
 		shell> java -jar ws-server-1.0RC1-jar-with-dependencies.jar &
 	
-	D. To stop the web service
+	2.D. To stop the web service
 		
 			shell> ps aux | grep ws-server-1.0RC1-jar-with-dependencies.jar
 			*Note the process id from the output*
@@ -153,7 +153,7 @@ The goal of this part of the installation are to:
 
 3. Installation from source.
 
-	A. Required.
+	3.A. Required.
 	- Java 1.6 or higher
 	- Maven 3.0 or higher
 	
@@ -164,7 +164,7 @@ The goal of this part of the installation are to:
 		shell> wget http://apache.mirrors.hoobly.com/maven/binaries/apache-maven-3.0.4-bin.tar.gz
 		shell> tar zxvf apache-maven-3.0.4-bin.tar.gz
 
-	B. Decompress server source
+	3.B. Decompress server source
 	
 		shell> cd /var/www/mgsv/ws
 		shell> tar -xzf ws-server-src.tar.gz
@@ -178,7 +178,7 @@ The goal of this part of the installation are to:
 			implementation. Code is extensively documented to incoperate changes. The Archetecture guide
 			has further information about inner working of this file.
 
-	C. Compile source using Maven.
+	3.C. Compile source using Maven.
 	
 		shell> cd /var/www/mgsv/ws-server
 		shell> /tmp/apache-maven-3.0.4/bin/mvn package
@@ -188,7 +188,7 @@ The goal of this part of the installation are to:
 			file is stand alone binary and contains all the necessary libraries. Only requirement to run this
 			binary would be a JDK 1.6+
 			
-	D. Copy binary file and continue from Section IV. 2. A	
+	3.D. Copy binary file and continue from Section IV.2.A.	
 	
 		shell> cp -f /var/www/mgsv/ws/mgsv-ws-server/target/ws-server-1.0RC1-jar-with-dependencies.jar /var/www/mgsv/ws/.
 

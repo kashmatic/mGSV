@@ -5,6 +5,7 @@
 	<li><a href="#" rel="tab4">Summary page</a></li>
 	<li><a href="#" rel="tab5">Pairwise page</a></li>
 	<li><a href="#" rel="tab6">Multiple page</a></li>
+	<li><a href="#" rel="tab7">Web service</a></li>
 	<!--
 		<li><a href="#" rel="tab6">Video tutorial</a></li>
 	-->
@@ -36,6 +37,9 @@
 		</a>
 	</div>
 	<div id="tab7" class="tabcontent">
+		<?php include("html/webservice.html"); ?>
+	</div>	
+	<div id="tab8" class="tabcontent">
 		<br>
 		The video can be downloaded <a href="GSVTutorial.m4v" target="_blank">here</a> 
 		<br>

@@ -1,0 +1,71 @@
+<h4>mGSV Web service Client</h4>
+
+<h4>1. Overview</h4>
+<p>
+	mGSV comes with an optional Web Service Component, when active it allows remote clients to upload synteny and annotation files using Web Service Protocol. An example client application that uses this protocol to upload local files and public urls is implemented. This documentation is gives a high level overview of the Web Service from the client's point of view. Shows how to use the example client application using its binary file as well as building the binary file from the sources. The final section is a guide to a Java programmer to build web service using simple java development tools.
+</p>
+
+
+<p>The Web Service is available to communicate with clients at http://cas-bioinfo.cas.unt.edu:8081/MGSVService</p>
+
+<h4>2. Execute client application</h4>
+<p>
+<strong>2.A. Required</strong><br>
+- Java 1.6 or higher<br>
+<br>
+<strong>2.B. Working directory</strong><br> 
+- We assume /opt/mgsv as a working directory<br>
+- Create the directory if required and all commands below are executed at this directory unless specified otherwise.<br>
+<pre>
+	shell> mkdir /opt/mgsv
+	shell> cd /opt/mgsv
+</pre>
+<strong>2.C. Download Jar file</strong><br> 
+<pre>
+	shell> wget http://cas-bioinfo.cas.unt.edu/ws/ws-client-1.0-RC3-jar-with-dependencies.jar
+</pre>
+<strong>2.D. Download sample synteny and annotation file.</strong><br>
+<pre>
+	shell> wget http://cas-bioinfo.cas.unt.edu/sample_synteny.txt
+	shell> wget http://cas-bioinfo.cas.unt.edu/sample_annotation.txt
+</pre>
+<strong>2.E. Create configuration file</strong><br>
+- to specify the address of mGSV server<br>
+<pre>
+	shell> echo "remote=http\://cas-genome.cas.unt.edu:8081/MGSVService" > config.properties
+</pre>
+<strong>2.F. Initiate web service</strong><br>
+- Use the downloaded jar file, along with sample synteny and annotation files<br>
+- You can also specify the path to these files<br>
+- Synteny file is required, Annotation file and email is optional.<br>
+- Output of the command below is &lt;session_id&gt;<br>
+<pre>
+	shell> java -jar ws-client-1.0-RC3-jar-with-dependencies.jar sample_synteny.txt sample_annotation.txt email@example.com
+	Example output: 306120220123200000023417
+</pre>
+- Use the &lt;session_id&gt; in the URL to access mGSV, after replacing the &lt;session_id&lt;<br>
+url: <span style="color:blue">http://cas-bioinfo.cas.unt.edu/mgsv/summary.php?session_id=&lt;session_id&gt;</span>
+</p>
+
+<h4>3. Running the client service from source</h4>
+<p>
+<strong>3.A. Required</strong><br>
+- JDK 1.6 or higher <br>
+- Maven 3.0 or higher<br>
+<br>
+<strong>3.B. Download client source.</strong><br>
+<pre>
+	shell> cd /opt/mgsv 
+	shell> wget http://cas-bioinfo.cas.unt.edu/ws/mgsv-ws-client.tar.gz 
+	shell> tar xzf mgsv-ws-client.tar.gz
+	shell> cd mgsv-ws-client
+</pre>
+
+<strong>3.C. Build the sources</strong><br>
+<pre>
+	shell> mvn package 
+	shell> cp target/ws-client-1.0-RC3-jar-with-dependencies.jar /opt/mgsv/.
+</pre>
+<strong>3.D. Go to above section (2.D) to continue running client Application</strong><br>
+</p>
+
