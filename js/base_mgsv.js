@@ -518,7 +518,7 @@ function refreshsyn(syn){
 	con = $('#_con').val();
 	value = $('#_input').val();
 	if(con == ''){ return; }
-	var pattern = new RegExp(/^[0-9]+$/);
+	var pattern = new RegExp(/^[0-9]+[e|E]?[-|+]?[0-9]+$/);
 	if(! pattern.test(value)){ return; }
 	sel = field + '@@' + con + '@@' +value;
 	console.log(sel);
