@@ -50,7 +50,7 @@
 				<td style="width:300px" valign=top>
 					<h4 style="color: #4682B4">Associations Provided</h4>
 					<div id="synInfo">
-						<table id="assoc"><tr><th>Association</th><th>Syntenies</th></tr></table>
+						<table id="assoc"><tr><th>Association</th><th>Regions</th></tr></table>
 					</div>
 				</td>
 				<td rowspan=2>

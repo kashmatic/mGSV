@@ -233,7 +233,7 @@ Raphael.fn.geneTrack = function(paper, height, width, start, end, org, ann, shap
 					} // switch	
 				} // else
 				$.each(item, function(k, v){
-					console.log(link[k]);
+					//console.log(link[k]);
 					if(link[k].match(/^<a href=/)){
 						re = /<a href="(.*)">(.*)<\/a>/;
 						result = re.exec(link[k]);

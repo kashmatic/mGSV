@@ -171,7 +171,7 @@ function controlSynteny(){
 <select id="_syn" style="background-color: white; width: 100px;" title="Column names"></select>\
 <select id="_con" style="background-color: white; width: 50px;" title="Operator">\
 <option>>=</option>\
-<option>==</option>\
+<option value="=">==</option>\
 <option><=</option>\
 </select><br>\
 <input style="width:100px;" type="text" id="_input" value="" style="width: 150px;" title="Provide coordinates">\

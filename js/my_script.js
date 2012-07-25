@@ -105,7 +105,7 @@ function controlSynteny(syn){
 <select id="' + syn + '_syn" style="background-color: white; width: 100px;" title="Column name"></select>\
 <select id="' + syn + '_con" style="background-color: white; width: 50px;" title="Operator">\
 <option>>=</option>\
-<option>==</option>\
+<option value="=">==</option>\
 <option><=</option>\
 </select>\
 <input style="width:100px;" type="text" id=' + syn + '_input value="" style="width: 150px;">\
@@ -779,7 +779,7 @@ function refreshsyn(syn){
 	con = $('#'+syn+'_con').val();
 	value = $('#'+syn+'_input').val();
 	if(con == ''){ return; }
-	var pattern = new RegExp(/^[0-9]+$/);
+	var pattern = new RegExp(/^[0-9]+[e|E]?[-|+]?[0-9]+$/);
 	if(! pattern.test(value)){ return; }
 	sel = field + '@@' + con + '@@' +value;
 	/*
@@ -791,7 +791,7 @@ function refreshsyn(syn){
 	*/
 	$('#'+syn+'_hide').val(sel);
 	//console.log(pattern.test(value));
-	//console.log($('#'+syn+'_hide').val());
+	console.log($('#'+syn+'_hide').val());
 	filterlist(syn);
 }
 
