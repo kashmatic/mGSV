@@ -34,7 +34,8 @@
 		<fieldset>
 			<legend>Publication</legend>
 			<p class="bodypara">
-				<p>The software is yet to be published.</p>
+				<p>Revanna, K., Munro, D., Gao, A., Chiu, C, Pathak, A. and Dong, Q. (2012) A Web-based multi-Genome Synteny Viewer for Customized Data. BMC Bioinformatics 13:190. DOI: 10.1186/1471-2105-13-190.</p>
+				<p>It is ranked as a "Highly accessed" paper by BioMed Central.</p>
 			</p>
 		</fieldset>
 		<? include ('lib/footer.php') ?>
