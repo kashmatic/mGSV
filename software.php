@@ -34,7 +34,7 @@
 		<fieldset>
 			<legend>Publication</legend>
 			<p class="bodypara">
-				<p>Revanna, K., Munro, D., Gao, A., Chiu, C, Pathak, A. and Dong, Q. (2012) A Web-based multi-Genome Synteny Viewer for Customized Data. BMC Bioinformatics 13:190. DOI: 10.1186/1471-2105-13-190.</p>
+				<p><a href="http://www.biomedcentral.com/1471-2105/13/190">Revanna, K., Munro, D., Gao, A., Chiu, C, Pathak, A. and Dong, Q. (2012) A Web-based multi-Genome Synteny Viewer for Customized Data. BMC Bioinformatics 13:190. DOI: 10.1186/1471-2105-13-190.</a></p>
 				<p>It is ranked as a "Highly accessed" paper by BioMed Central.</p>
 			</p>
 		</fieldset>
